@@ -27,7 +27,11 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for {date}</h4>
+      </div>
+      <div>
+        MAKE A TABLE WITH THIS FORMAT
+        {reservations.map((reservation) => <p>{reservation.first_name}</p>)}
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}
