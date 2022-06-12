@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import ErrorAlert from "../layout/ErrorAlert";
+import { createReservation } from "../utils/api";
 
 //visual api error notifaction to do (check dashboard implementation)
 
 function NewReservation() {
   const history = useHistory();
+  const [error, setError] = useState(null)
   const initialFormState = {
     first_name: "",
     last_name: "",
     mobile_number: "",
     reservation_date: "",
-    reservaton_time: "",
-    people: null,
+    reservation_time: "",
+    people: 0,
   };
   const [formData, setFormData] = useState(initialFormState);
 
@@ -29,9 +32,14 @@ function NewReservation() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    //insert api call function here for update reservations
-    history.push(`/reservations`);
-    history.go(0);
+    setError(null);
+    try {
+        await createReservation(formData);
+        history.push(`/reservations`);
+        history.go(0);
+    } catch (err) {
+        setError(err)
+    }
   };
 
   const handleCancel = (event) => {
@@ -40,6 +48,7 @@ function NewReservation() {
 
   return (
     <>
+    <ErrorAlert error={error} />
       <h3 className="">Create a reservation</h3>
       <form onSubmit={handleSubmit}>
         <label htmlFor="first_name" className="formLabel mt-2">
@@ -94,15 +103,15 @@ function NewReservation() {
           className="form-control"
           required
         />
-        <label htmlFor="reservaton_time" className="formLabel mt-2">
+        <label htmlFor="reservation_time" className="formLabel mt-2">
           Enter Reservation Time:
         </label>
         <input
-          name="reservaton_time"
-          id="reservaton_time"
+          name="reservation_time"
+          id="reservation_time"
           type="time"
           onChange={handleChange}
-          value={formData.reservaton_time}
+          value={formData.reservation_time}
           className="form-control"
           required
         />
