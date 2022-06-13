@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import sortReservations from "../reservations/sortReservations";
 
 /**
  * Defines the dashboard page.
@@ -12,16 +13,24 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
-  useEffect(loadDashboard, [date]);
-
-  function loadDashboard() {
-    const abortController = new AbortController();
-    setReservationsError(null);
-    listReservations({ date }, abortController.signal)
-      .then(setReservations)
-      .catch(setReservationsError);
-    return () => abortController.abort();
-  }
+  useEffect(() => {
+    async function loadDashboard() {
+        const abortController = new AbortController();
+        setReservationsError(null);
+        try {
+          const result = await listReservations(
+            { date },
+            abortController.signal
+          );
+          const sortedReservations = await sortReservations(result);
+          setReservations(sortedReservations);
+        } catch (error) {
+          setReservationsError(error);
+        }
+        return () => abortController.abort();
+      }
+    loadDashboard()
+  }, [date]);
 
   return (
     <main>
@@ -31,7 +40,9 @@ function Dashboard({ date }) {
       </div>
       <div>
         MAKE A TABLE WITH THIS FORMAT
-        {reservations.map((reservation) => <p>{reservation.first_name}</p>)}
+        {reservations.map((reservation) => (
+          <p>{reservation.first_name}</p>
+        ))}
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}
