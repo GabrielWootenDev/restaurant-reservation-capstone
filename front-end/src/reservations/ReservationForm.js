@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory} from "react-router-dom";
 import { createReservation } from "../utils/api";
 
-function ReservationForm({setError}) {
+function ReservationForm({setDate, setError}) {
   const history = useHistory();
   const initialFormState = {
     first_name: "",
@@ -12,7 +12,7 @@ function ReservationForm({setError}) {
     reservation_time: "",
     people: 0,
   };
-  
+
   const [formData, setFormData] = useState(initialFormState);
 
   //when anything is input into either field the value is stored in formData state and that input value changes to the same as the form with the based on the target key.
@@ -32,8 +32,8 @@ function ReservationForm({setError}) {
     setError(null);
     try {
       await createReservation(formData);
+      setDate(formData.reservation_date);
       history.push(`/reservations`);
-      history.go(0);
     } catch (err) {
       setError(err);
     }

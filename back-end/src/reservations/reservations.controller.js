@@ -1,8 +1,15 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const {
+  bodyDataHasFirstName,
+  bodyDataHasLastName,
+  bodyDataHasMobile,
+  bodyDataHasPeople,
+  bodyDataHasDate,
+  bodyDataHasTime,
+} = require("../validations/bodyDataHas");
 
 //refactor all code for single responsiblity and validation as a later time
-
 
 async function list(req, res) {
   const data = await service.list();
@@ -15,7 +22,6 @@ async function listOnDate(req, res) {
   res.json({ data });
 }
 
-
 async function create(req, res) {
   const reservation = req.body.data;
   const data = await service.create(reservation);
@@ -25,5 +31,13 @@ async function create(req, res) {
 module.exports = {
   list: [asyncErrorBoundary(list)],
   listOnDate: [asyncErrorBoundary(listOnDate)],
-  create: [asyncErrorBoundary(create)],
+  create: [
+    bodyDataHasFirstName,
+    bodyDataHasLastName,
+    bodyDataHasMobile,
+    bodyDataHasPeople,
+    bodyDataHasDate,
+    bodyDataHasTime,
+    asyncErrorBoundary(create),
+  ],
 };
