@@ -8,6 +8,7 @@ const {
   bodyDataHasDate,
   bodyDataHasTime,
 } = require("../validations/bodyDataHas");
+const {isOpen, isPast} = require("../validations/validDay")
 
 //refactor all code for single responsiblity and validation as a later time
 
@@ -38,6 +39,8 @@ module.exports = {
     bodyDataHasPeople,
     bodyDataHasDate,
     bodyDataHasTime,
+    isOpen,
+    isPast,
     asyncErrorBoundary(create),
   ],
 };

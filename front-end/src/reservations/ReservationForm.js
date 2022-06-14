@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
+import { isDatePast, isTuesday } from "./reservationErrors";
+import { today } from "../utils/date-time";
 
-function ReservationForm({setDate, setError}) {
+function ReservationForm({setDate, setError, error}) {
   const history = useHistory();
   const initialFormState = {
     first_name: "",
@@ -22,26 +24,46 @@ function ReservationForm({setDate, setError}) {
       ...formData,
       [event.target.name]: value,
     });
-    console.log(formData);
   };
 
   //handleSubmit this will create a new reservation then render the dashboard with useHistory,
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError(null);
+    const day = today();
+    const newErrors = [];
+    setError([]);
+    console.log(error)
+    try {
+      isDatePast(formData.reservation_date, day)
+    } catch (err) {
+      newErrors.push(err);
+    }
+    try {
+      isTuesday(formData.reservation_date)
+    } catch (err) {
+      newErrors.push(err);
+    }
+    setError(() => [...error, ...newErrors])
+    console.log(error)
+
+    if (error.length > 0) {
+      return;
+    }
+
     try {
       await createReservation(formData);
       setDate(formData.reservation_date);
       history.push(`/reservations`);
     } catch (err) {
-      setError(err);
+      setError(() => [...error, ...newErrors]);
     }
   };
 
   const handleCancel = (event) => {
     history.goBack();
   };
+
 
   return (
     <form onSubmit={handleSubmit}>
