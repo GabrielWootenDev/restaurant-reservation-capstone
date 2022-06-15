@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
-import { isDatePast, isTuesday } from "./reservationErrors";
+import {
+  isDatePast,
+  isTuesday,
+  isTimePast,
+  isOpenHours,
+} from "./reservationValidation";
 import { today } from "../utils/date-time";
 
-function ReservationForm({setDate, setError, error}) {
+function ReservationForm({ setDate, setError, error }) {
   const history = useHistory();
   const initialFormState = {
     first_name: "",
@@ -32,38 +37,45 @@ function ReservationForm({setDate, setError, error}) {
     event.preventDefault();
     const day = today();
     const newErrors = [];
-    setError([]);
-    console.log(error)
+    newErrors.splice();
+    setError(() => [...newErrors]);
     try {
-      isDatePast(formData.reservation_date, day)
+      isOpenHours(formData.reservation_time);
     } catch (err) {
       newErrors.push(err);
     }
     try {
-      isTuesday(formData.reservation_date)
+      isDatePast(formData.reservation_date, day);
     } catch (err) {
       newErrors.push(err);
     }
-    setError(() => [...error, ...newErrors])
-    console.log(error)
-
-    if (error.length > 0) {
-      return;
+    try {
+      isTimePast(formData.reservation_date, formData.reservation_time);
+    } catch (err) {
+      newErrors.push(err);
     }
+    try {
+      isTuesday(formData.reservation_date);
+    } catch (err) {
+      newErrors.push(err);
+    }
+    setError(() => [...newErrors]);
+
 
     try {
-      await createReservation(formData);
-      setDate(formData.reservation_date);
-      history.push(`/reservations`);
+      if (newErrors.length <= 0) {
+        await createReservation(formData);
+        setDate(formData.reservation_date);
+        history.push(`/reservations`);
+      }
     } catch (err) {
-      setError(() => [...error, ...newErrors]);
+      setError(() => [...error, err]);
     }
   };
 
   const handleCancel = (event) => {
     history.goBack();
   };
-
 
   return (
     <form onSubmit={handleSubmit}>

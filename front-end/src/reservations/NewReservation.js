@@ -4,7 +4,7 @@ import ReservationForm from "./ReservationForm";
 
 function NewReservation({ setDate }) {
   const [error, setError] = useState([]);
-	// todo fix error stacking
+  
   return (
     <>
       <ErrorAlert error={error} />

@@ -14,7 +14,7 @@ function ErrorAlert({ error }) {
     error && (
       <>
         {error.map((err) => (
-          <div className="alert alert-danger m-2">Error: {err.message}</div>
+          <div key={err.message} className="alert alert-danger m-2">Error: {err.message}</div>
         ))}
       </>
     )
