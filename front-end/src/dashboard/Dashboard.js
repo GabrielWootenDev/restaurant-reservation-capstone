@@ -13,6 +13,9 @@ import TablesList from "./SeatingTable";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
+
+//replace tables array after backend and database is created
+
 function Dashboard({ date, setDate }) {
   const tables = [
     {
