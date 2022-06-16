@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
+import "./Dashboard.css";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import sortReservations from "../reservations/sortReservations";
 import ReservationsTable from "./ReservationsTable";
-import "./Dashboard.css"
 import DashboardNav from "./DashboardNav";
+import TablesList from "./SeatingTable";
 
 /**
  * Defines the dashboard page.
@@ -13,6 +14,13 @@ import DashboardNav from "./DashboardNav";
  * @returns {JSX.Element}
  */
 function Dashboard({ date, setDate }) {
+  const tables = [
+    {
+      table_id: 1,
+      table_name: "Bar #1",
+      table_status: "Occupied",
+    },
+  ];
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
@@ -31,13 +39,15 @@ function Dashboard({ date, setDate }) {
     }
     loadDashboard();
   }, [date]);
-  // fix centering for mid-small view
   return (
     <main className="container-fluid p-0">
       <ErrorAlert error={reservationsError} />
       <h1 className="d-flex justify-content-center">Dashboard</h1>
-      <DashboardNav date={date} setDate={setDate}/>
-      <ReservationsTable reservations={reservations} />
+      <DashboardNav date={date} setDate={setDate} />
+      <div className="d-md-flex col-md p-0">
+        <ReservationsTable reservations={reservations} />
+        <TablesList tables={tables} />
+      </div>
     </main>
   );
 }
