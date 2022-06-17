@@ -21,7 +21,7 @@ function Dashboard({ date, setDate }) {
     {
       table_id: 1,
       table_name: "Bar #1",
-      table_status: "Occupied",
+      table_status: "Available",
     },
   ];
   const [reservations, setReservations] = useState([]);

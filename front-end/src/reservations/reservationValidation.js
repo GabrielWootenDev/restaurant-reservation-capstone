@@ -24,6 +24,7 @@ function isTuesday(date) {
 function isTimePast(date, time) {
   const reservationTime = Date.parse(date + " " + time);
   const now = Date.now();
+  console.log(now)
   const error = { message: `Reservation must be at a future time` };
 
   if (reservationTime < now) {

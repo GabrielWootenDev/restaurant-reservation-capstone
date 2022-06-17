@@ -1,3 +1,5 @@
+//try changing new Date to Date.now()
+
 function isOpen(req, res, next) {
   const { data = {} } = res.locals.data;
   const reservationDay = new Date(data["reservation_date"]);
@@ -22,6 +24,7 @@ function isPastTime(req, res, next) {
     data["reservation_date"] + " " + data["reservation_time"]
   );
   const now = Date.now();
+  console.log(Date(now))
   reservationTime >= now
     ? next()
     : next({ status: 400, message: `Reservation must be on a future time.` });
