@@ -1,5 +1,3 @@
-//try changing new Date to Date.now()
-
 function isOpen(req, res, next) {
   const { data = {} } = res.locals.data;
   const reservationDay = new Date(data["reservation_date"]);
@@ -11,7 +9,8 @@ function isOpen(req, res, next) {
 function isPastDay(req, res, next) {
   const { data = {} } = res.locals.data;
   const reservationDay = new Date(data["reservation_date"]);
-  const today = new Date();
+  const now = Date.now();
+  const today = new Date(now);
   today.setHours(00, 00, 01);
   reservationDay >= today
     ? next()

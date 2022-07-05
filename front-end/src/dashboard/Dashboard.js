@@ -5,7 +5,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import sortReservations from "../reservations/sortReservations";
 import ReservationsTable from "./ReservationsTable";
 import DashboardNav from "./DashboardNav";
-import TablesList from "./SeatingTable";
+import SeatingTable from "./SeatingTable";
 
 /**
  * Defines the dashboard page.
@@ -16,7 +16,7 @@ import TablesList from "./SeatingTable";
 
 //replace tables array after backend and database is created
 
-function Dashboard({ date, setDate }) {
+function Dashboard({ date, setDate}) {
   const tables = [
     {
       table_id: 1,
@@ -49,7 +49,7 @@ function Dashboard({ date, setDate }) {
       <DashboardNav date={date} setDate={setDate} />
       <div className="d-md-flex col-md p-0">
         <ReservationsTable reservations={reservations} />
-        <TablesList tables={tables} />
+        <SeatingTable tables={tables} />
       </div>
     </main>
   );
