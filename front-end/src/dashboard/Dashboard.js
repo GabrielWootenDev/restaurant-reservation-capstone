@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import sortReservations from "../reservations/sortReservations";
 import ReservationsTable from "./ReservationsTable";
@@ -16,16 +16,10 @@ import SeatingTable from "./SeatingTable";
 
 //replace tables array after backend and database is created
 
-function Dashboard({ date, setDate}) {
-  const tables = [
-    {
-      table_id: 1,
-      table_name: "Bar #1",
-      table_status: "Available",
-    },
-  ];
+function Dashboard({ date, setDate }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
 
   useEffect(() => {
     async function loadDashboard() {
@@ -42,6 +36,19 @@ function Dashboard({ date, setDate}) {
     }
     loadDashboard();
   }, [date]);
+
+  useEffect(() => {
+    async function loadTables() {
+      const abortController = new AbortController();
+      const result = await listTables(abortController.signal);
+      setTables(result);
+
+      return () => abortController.abort();
+    }
+    
+    loadTables();
+  }, [reservations]);
+
   return (
     <main className="container-fluid p-0">
       <ErrorAlert error={reservationsError} />

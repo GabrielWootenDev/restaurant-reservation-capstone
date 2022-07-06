@@ -17,7 +17,7 @@ function SeatingTable({ tables }) {
           </thead>
           <tbody>
             {tables.map((table) =>
-              table.table_status === "Occupied" ? (
+              table.reservation_id !== null ? (
                 <tr key={table.table_id}>
                   <td className="text-center align-middle">
                     {table.table_name}
@@ -26,7 +26,7 @@ function SeatingTable({ tables }) {
                     data-table-id-status={`${table.table_id}`}
                     className="text-center align-middle text-danger"
                   >
-                    {table.table_status}
+                    Occupied
                   </td>
                 </tr>
               ) : (
@@ -38,7 +38,7 @@ function SeatingTable({ tables }) {
                     data-table-id-status={`${table.table_id}`}
                     className="text-center align-middle text-success"
                   >
-                    {table.table_status}
+                    Free
                   </td>
                 </tr>
               )

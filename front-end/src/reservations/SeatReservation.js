@@ -7,7 +7,7 @@ function SeatReservation() {
   const reservationId = useParams().reservation_id;
 
   // create change handler and submit handler
-	// create table from state for dashboard
+  // create table from state for dashboard
   useEffect(() => {
     async function loadOpenTables() {
       const abortController = new AbortController();
@@ -20,17 +20,27 @@ function SeatReservation() {
 
   return (
     <>
-			<form className="d-flex flex-column container fluid justify-content-center col-md-5">
-            <div className="form-group">
-                <h1 className="h1 text-center">Select Table for Reservation #{reservationId}</h1>
-                <select className="form-control" name="table_id">
-                    <option>Choose a table...</option>
-                    {openTables.map((table) => <option key={table.table_id} value={table.table_id}>{table.table_name} - {table.capacity}</option>)}
-                </select>
-            </div>
-            <button type="submit" className="btn btn-primary m-2">Submit</button>
-            <button type="button" className="btn btn-secondary m-2" >Cancel</button>
-        </form>
+      <form className="d-flex flex-column container fluid justify-content-center col-md-5">
+        <div className="form-group">
+          <h1 className="h1 text-center">
+            Select Table for Reservation #{reservationId}
+          </h1>
+          <select className="form-control" name="table_id">
+            <option>Choose a table...</option>
+            {openTables.map((table) => (
+              <option key={table.table_id} value={table.table_id}>
+                {table.table_name} - {table.capacity}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button type="submit" className="btn btn-primary m-2">
+          Submit
+        </button>
+        <button type="button" className="btn btn-secondary m-2">
+          Cancel
+        </button>
+      </form>
     </>
   );
 }
