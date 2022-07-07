@@ -1,3 +1,6 @@
+import React from "react";
+import { Link } from "react-router-dom";
+
 function ReservationsTable({ reservations }) {
   return (
     <>
@@ -45,13 +48,13 @@ function ReservationsTable({ reservations }) {
                 </td>
                 <td className="text-center align-middle">
                   <div>
-                    <a
-                      class="btn btn-danger"
-                      href={`/reservations/${reservation.reservation_id}/seat`}
-                      role="button"
+                    <Link to={{ pathname:`/reservations/${reservation.reservation_id}/seat`, state: {reservation}}}>
+                    <button
+                      className="btn btn-danger"
                     >
                       Seat
-                    </a>
+                    </button>
+                    </Link>
                   </div>
                 </td>
               </tr>

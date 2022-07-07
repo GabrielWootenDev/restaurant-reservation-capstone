@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useLocation } from "react-router";
 import { listOpenTables } from "../utils/api";
 
 function SeatReservation() {
   const [openTables, setOpenTables] = useState([]);
-  const reservationId = useParams().reservation_id;
+  const initialFormState = {
+    table_id: null,
+  };
+  const [formData, setFormData] = useState(initialFormState);
+  const location = useLocation();
+  const { reservation } = location.state;
+  console.log(reservation);
 
-  // create change handler and submit handler
-  // create table from state for dashboard
+  //submit handler
   useEffect(() => {
     async function loadOpenTables() {
       const abortController = new AbortController();
@@ -18,20 +23,43 @@ function SeatReservation() {
     loadOpenTables();
   }, []);
 
+  const changeHandler = ({ target }) => {
+    const { value, name } = target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    console.log(formData);
+  };
+
+  const tableList = openTables.map((table) => {
+    const overCapacity = Number(table.capacity) < Number(reservation.people);
+    return (
+      <option
+        disabled={overCapacity}
+        key={table.table_id}
+        value={table.table_id}
+      >
+        {table.table_name} - {table.capacity}
+      </option>
+    );
+  });
+
   return (
     <>
       <form className="d-flex flex-column container fluid justify-content-center col-md-5">
         <div className="form-group">
           <h1 className="h1 text-center">
-            Select Table for Reservation #{reservationId}
+            Select Table for {reservation.last_name} party of{" "}
+            {reservation.people}
           </h1>
-          <select className="form-control" name="table_id">
+          <select
+            className="form-control"
+            name="table_id"
+            onChange={changeHandler}
+          >
             <option>Choose a table...</option>
-            {openTables.map((table) => (
-              <option key={table.table_id} value={table.table_id}>
-                {table.table_name} - {table.capacity}
-              </option>
-            ))}
+            {tableList}
           </select>
         </div>
         <button type="submit" className="btn btn-primary m-2">

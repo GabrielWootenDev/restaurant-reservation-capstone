@@ -1,4 +1,5 @@
 function SeatingTable({ tables }) {
+
   return (
     <>
       <div className="col-md-4">
