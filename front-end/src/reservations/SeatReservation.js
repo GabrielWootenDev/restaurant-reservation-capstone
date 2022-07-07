@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router";
-import { listOpenTables } from "../utils/api";
+import { useParams } from "react-router";
+import { listOpenTables, readReservation } from "../utils/api";
 
 function SeatReservation() {
   const [openTables, setOpenTables] = useState([]);
+  const [reservation, setReservation] = useState([]);
   const initialFormState = {
     table_id: null,
   };
   const [formData, setFormData] = useState(initialFormState);
-  const location = useLocation();
-  const { reservation } = location.state;
-  console.log(reservation);
+
+  const reservationId = useParams().reservation_id;
+
+  useEffect(() => {
+    async function loadReservation() {
+      const abortController = new AbortController();
+      const result = await readReservation(reservationId);
+      setReservation(result);
+      return () => abortController.abort();
+    }
+    loadReservation();
+  }, [reservationId]);
 
   //submit handler
   useEffect(() => {
@@ -50,8 +60,7 @@ function SeatReservation() {
       <form className="d-flex flex-column container fluid justify-content-center col-md-5">
         <div className="form-group">
           <h1 className="h1 text-center">
-            Select Table for {reservation.last_name} party of{" "}
-            {reservation.people}
+            Select Table for {reservation.last_name} party of {reservation.people}
           </h1>
           <select
             className="form-control"

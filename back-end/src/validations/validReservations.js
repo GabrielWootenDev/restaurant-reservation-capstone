@@ -1,23 +1,23 @@
-function isOpen(req, res, next) {
+function checkOpen(req, res, next) {
   const { data = {} } = res.locals.data;
   const reservationDay = new Date(data["reservation_date"]);
   reservationDay.getDay() !== 1
     ? next()
-    : next({ status: 400, message: `Reservation must not be on a Tuesday.` });
+    : next({ status: 400, message: `Restaurant is closed on Tuesday.` });
 }
 
-function isPastDay(req, res, next) {
-  const { data = {} } = res.locals.data;
-  const reservationDay = new Date(data["reservation_date"]);
-  const now = Date.now();
-  const today = new Date(now);
-  today.setHours(00, 00, 01);
-  reservationDay >= today
-    ? next()
-    : next({ status: 400, message: `Reservation must be on a future date.` });
+
+function checkFutureDate(req, res, next) {
+  const today = new Date();
+  const {reservation_date, reservation_time} = req.body.data;
+  const testDate =  new Date(`${reservation_date} ${reservation_time}`)
+  if (today.getTime() < testDate.getTime()) {
+    return next();
+  }
+  next({status:400, message:`Reservation must be in the future`})
 }
 
-function isPastTime(req, res, next) {
+function checkPastTime(req, res, next) {
   const { data = {} } = res.locals.data;
   const reservationTime = Date.parse(
     data["reservation_date"] + " " + data["reservation_time"]
@@ -29,7 +29,7 @@ function isPastTime(req, res, next) {
     : next({ status: 400, message: `Reservation must be on a future time.` });
 }
 
-function isOpenTime(req, res, next) {
+function checkOpenTime(req, res, next) {
   const { data = {} } = res.locals.data;
   const time = data["reservation_time"];
   const reservationTime = time.split(":");
@@ -52,9 +52,21 @@ function isOpenTime(req, res, next) {
       });
 }
 
+/* function checkValidTime(req,res,next) {
+  const {reservation_time} = req.body.data;
+  const testTime = reservation_time;
+  const openTime = "10:30";
+  const closeTime = "21:30";
+  if (testTime >= openTime && testTime <= closeTime){
+    return next();
+  }
+  next({status:400, message:`Time must be between 10:30 AM and 9:30 PM`})
+}
+*/
+
 module.exports = {
-  isOpen,
-  isPastDay,
-  isPastTime,
-  isOpenTime,
+  checkOpen,
+  checkFutureDate,
+  checkPastTime,
+  checkOpenTime,
 };

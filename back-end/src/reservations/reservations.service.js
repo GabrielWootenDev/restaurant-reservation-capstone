@@ -7,7 +7,12 @@ async function list() {
 }
 
 async function listOnDate(date) {
-    const results = await knex("reservations").select("*").where({reservation_date: date});
+    const results = await knex("reservations").select("*").where({reservation_date: date}).orderBy("reservation_time", "asc");
+    return results;
+}
+
+async function read(reservationId) {
+    const results = await knex("reservations").select("*").where({reservation_id: reservationId});
     return results;
 }
 
@@ -19,5 +24,6 @@ async function create(reservation) {
 module.exports = {
     list,
     listOnDate,
+    read,
     create,
 }

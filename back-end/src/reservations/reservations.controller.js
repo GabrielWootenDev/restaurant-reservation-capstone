@@ -8,7 +8,7 @@ const {
   bodyDataHasDate,
   bodyDataHasTime,
 } = require("../validations/bodyDataHas");
-const {isOpen, isPastDay, isPastTime, isOpenTime} = require("../validations/validReservations")
+const {checkOpen, checkFutureDate, checkPastTime,checkOpenTime} = require("../validations/validReservations")
 
 //refactor all code for single responsiblity and validation as a later time
 
@@ -29,20 +29,37 @@ async function create(req, res) {
   res.status(201).json({ data });
 }
 
+async function read(req, res) {
+  const data = res.locals.reservation;
+  res.status(200).json({ data });
+}
+
+async function validReservationId(req, res, next) {
+  const reservationId = req.params.reservation_id;
+  const data = await service.read(reservationId);
+  if (!data.reservation_id) {
+    next({ status: 404, message: `Reservation Id ${reservationId} not found` })
+  } else {
+    res.locals.reservation = data;
+    next();
+  }
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   listOnDate: [asyncErrorBoundary(listOnDate)],
+  read: [asyncErrorBoundary(validReservationId), read],
   create: [
     bodyDataHasFirstName,
     bodyDataHasLastName,
     bodyDataHasMobile,
-    bodyDataHasPeople,
     bodyDataHasDate,
     bodyDataHasTime,
-    isOpen,
-    isPastDay,
-    isPastTime,
-    isOpenTime,
+    bodyDataHasPeople,
+    checkOpen,
+    checkFutureDate,
+    checkPastTime,
+    checkOpenTime,
     asyncErrorBoundary(create),
   ],
 };
