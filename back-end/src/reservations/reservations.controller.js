@@ -8,7 +8,12 @@ const {
   bodyDataHasDate,
   bodyDataHasTime,
 } = require("../validations/bodyDataHas");
-const {checkOpen, checkFutureDate, checkPastTime,checkOpenTime} = require("../validations/validReservations")
+const {
+  checkOpen,
+  checkFutureDate,
+  checkPastTime,
+  checkOpenTime,
+} = require("../validations/validReservations");
 
 //refactor all code for single responsiblity and validation as a later time
 
@@ -37,11 +42,11 @@ async function read(req, res) {
 async function validReservationId(req, res, next) {
   const reservationId = req.params.reservation_id;
   const data = await service.read(reservationId);
-  if (!data.reservation_id) {
-    next({ status: 404, message: `Reservation Id ${reservationId} not found` })
-  } else {
+  if (data) {
     res.locals.reservation = data;
     next();
+  } else {
+    next({ status: 404, message: `Reservation Id ${reservationId} not found` });
   }
 }
 

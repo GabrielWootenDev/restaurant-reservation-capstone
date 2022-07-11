@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { createTable } from "../utils/api";
 
+//add create table validations
 
 function TableForm() {
   const history = useHistory();
@@ -25,14 +27,13 @@ function TableForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    //await createReservation(formData);
+    await createTable(formData);
     history.push(`/`);
   };
 
   return (
     <>
-      <form  onSubmit={handleSubmit} >
+      <form onSubmit={handleSubmit}>
         <label htmlFor="table_name" className="formLabel mt-2">
           Enter Table Name:
         </label>

@@ -27,13 +27,13 @@ function Routes() {
   useEffect(() => {
     async function loadDashboard() {
       const abortController = new AbortController();
-      setReservationsError(null);
+      setReservationsError([]);
       try {
         const result = await listReservations({ date }, abortController.signal);
         const sortedReservations = await sortReservations(result);
         setReservations(() => sortedReservations);
       } catch (error) {
-        setReservationsError(error);
+        setReservationsError(() => [error]);
       }
       return () => abortController.abort();
     }
@@ -50,7 +50,7 @@ function Routes() {
     }
 
     loadTables();
-  }, [reservations]);
+  }, [reservations, date, tables]);
 
   return (
     <Switch>

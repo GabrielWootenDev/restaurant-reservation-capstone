@@ -1,9 +1,9 @@
-//try and fix date class to use timezone at some point
 
-function isDatePast(date, today) {
-  const newDate = new Date(date);
+function isDatePast(date, time, today) {
+  const newDate = new Date(`${date} ${time}`);
+  const offset = newDate.getTimezoneOffset()
   const todayDate = new Date(today);
-  todayDate.setHours("00", "00", "01");
+  todayDate.setHours(todayDate.getHours() + (offset / 60));
   const error = { message: "Reservation must be on a future date" };
   if (newDate < todayDate) {
     throw error;
@@ -11,11 +11,10 @@ function isDatePast(date, today) {
   return false;
 }
 
-function isTuesday(date) {
-  const newDate = new Date(date);
+function isTuesday(date, time) {
+  const testDate =  new Date(`${date} ${time}`)
   const error = { message: `Reservation must not be on a Tuesday.` };
-
-  if (newDate.getDay() === 1) {
+  if (testDate.getDay() === 2) {
     throw error;
   }
   return false;
@@ -24,7 +23,6 @@ function isTuesday(date) {
 function isTimePast(date, time) {
   const reservationTime = Date.parse(date + " " + time);
   const now = Date.now();
-  console.log(now)
   const error = { message: `Reservation must be at a future time` };
 
   if (reservationTime < now) {
@@ -41,13 +39,11 @@ function isOpenHours(time) {
   const open = "10:30:00".split(":");
   const lastReservation = "21:30:00".split(":");
 
-  const openSeconds = parseInt(open[0] * 3600 + open[1] * 60 + open[0]);
+  const openSeconds = parseInt(open[0] * 3600 + open[1] * 60);
   const lastReservationSeconds = parseInt(
-    lastReservation[0] * 3600 + lastReservation[1] * 60 + lastReservation[0]
-  );
+    lastReservation[0] * 3600 + lastReservation[1] * 60);
   const reservationTimeSeconds = parseInt(
-    reservationTime[0] * 3600 + reservationTime[1] * 60 + reservationTime[0]
-  );
+    reservationTime[0] * 3600 + reservationTime[1] * 60);
   if (
     reservationTimeSeconds < openSeconds ||
     reservationTimeSeconds > lastReservationSeconds

@@ -15,14 +15,14 @@ function bodyDataHasLastName(req, res, next) {
 
 function bodyDataHasMobile(req, res, next) {
   const { data = {} } = res.locals.data;
-  data["mobile_number"] && typeof data["mobile_number"] === "string"
+  data["mobile_number"]
     ? next()
     : next({ status: 400, message: `Reservation must include a mobile_number` });
 }
 
 function bodyDataHasPeople(req, res, next) {
   const { data = {} } = res.locals.data;
-  data["people"] && typeof data["people"] !== "string" && data["people"] >= 1
+  data["people"] && typeof data["people"] === "number"  && data["people"] >= 1
     ? next()
     : next({ status: 400, message: `Reservation must include a number of people` });
 }

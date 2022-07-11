@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { listOpenTables, readReservation } from "../utils/api";
+import { useHistory, useParams } from "react-router";
+import { listOpenTables, readReservation, updateTable } from "../utils/api";
 
 function SeatReservation() {
   const [openTables, setOpenTables] = useState([]);
   const [reservation, setReservation] = useState([]);
+  const history = useHistory();
   const initialFormState = {
     table_id: null,
   };
@@ -15,7 +16,7 @@ function SeatReservation() {
   useEffect(() => {
     async function loadReservation() {
       const abortController = new AbortController();
-      const result = await readReservation(reservationId);
+      const result = await readReservation(reservationId, abortController.signal);
       setReservation(result);
       return () => abortController.abort();
     }
@@ -37,10 +38,18 @@ function SeatReservation() {
     const { value, name } = target;
     setFormData({
       ...formData,
+      reservation_id: reservation.reservation_id,
       [name]: value,
     });
     console.log(formData);
   };
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    const abortController = new AbortController();
+    await updateTable(formData, abortController.signal);
+    history.push("/reservations");
+  }
 
   const tableList = openTables.map((table) => {
     const overCapacity = Number(table.capacity) < Number(reservation.people);
@@ -57,7 +66,7 @@ function SeatReservation() {
 
   return (
     <>
-      <form className="d-flex flex-column container fluid justify-content-center col-md-5">
+      <form className="d-flex flex-column container fluid justify-content-center col-md-5" onSubmit={submitHandler}>
         <div className="form-group">
           <h1 className="h1 text-center">
             Select Table for {reservation.last_name} party of {reservation.people}

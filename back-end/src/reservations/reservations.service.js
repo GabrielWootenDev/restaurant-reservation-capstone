@@ -13,7 +13,7 @@ async function listOnDate(date) {
 
 async function read(reservationId) {
     const results = await knex("reservations").select("*").where({reservation_id: reservationId});
-    return results;
+    return results[0];
 }
 
 async function create(reservation) {

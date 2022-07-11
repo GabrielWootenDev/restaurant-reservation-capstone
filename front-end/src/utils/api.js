@@ -93,3 +93,25 @@ export async function listOpenTables(signal) {
   const url = `${API_BASE_URL}/tables/available`;
   return await fetchJson(url, {headers, signal}, []);
 }
+
+export async function createTable(table, signal) {
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: table }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+export async function updateTable(table, signal) {
+  const url = `${API_BASE_URL}/tables/${table.table_id}/seat`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: {reservation_id: table.reservation_id}}),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
