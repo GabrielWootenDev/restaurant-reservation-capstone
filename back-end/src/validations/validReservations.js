@@ -28,27 +28,6 @@ function checkPastTime(req, res, next) {
     : next({ status: 400, message: `Reservation must be on a future time.` });
 }
 
-/* function checkOpenTime(req, res, next) {
-  const { data = {} } = res.locals.data;
-  const time = data["reservation_time"];
-  const reservationTime = time.split(":");
-  const open = "10:30:00".split(":");
-  const lastReservation = "21:30:00".split(":");
-
-  const openSeconds = parseInt(open[0] * 3600 + open[1] * 60);
-  const lastReservationSeconds = parseInt(
-    lastReservation[0] * 3600 + lastReservation[1] * 60);
-  const reservationTimeSeconds = parseInt(
-    reservationTime[0] * 3600 + reservationTime[1] * 60);
-  reservationTimeSeconds > openSeconds &&
-  reservationTimeSeconds < lastReservationSeconds
-    ? next()
-    : next({
-        status: 400,
-        message: `Reservation must be between 10:30 AM and 9:30 PM.`,
-      });
-}
-*/
 
 function checkOpenTime(req, res, next) {
   const { reservation_time } = req.body.data;

@@ -1,6 +1,6 @@
 const service = require("./tables.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const { as } = require("../db/connection");
+const { validTableName } = require("../validations/validTables")
 
 //add create table validations
 
@@ -20,10 +20,11 @@ async function listOpen(req, res, next) {
 }
 
 async function create(req, res, next) {
-  const newTable = req.body.data;
+  const { newTable } = res.locals;
   const data = await service.create(newTable);
   res.status(201).json({ data });
 }
+
 async function update(req, res, next) {
   const table_id = req.params.table_id;
   const { reservation_id } = req.body.data;
@@ -33,6 +34,6 @@ async function update(req, res, next) {
 
 module.exports = {
   list: [asyncErrorBoundary(listOpen), asyncErrorBoundary(list)],
-  create: [asyncErrorBoundary(create)],
+  create: [validTableName, asyncErrorBoundary(create)],
   update: [asyncErrorBoundary(update)],
 };

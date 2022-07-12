@@ -1,35 +1,7 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { createTable } from "../utils/api";
+import React from "react";
 
-//add create table validations
 
-function TableForm() {
-  const history = useHistory();
-  const initialFormState = {
-    table_name: "",
-    capacity: "",
-  };
-
-  const [formData, setFormData] = useState(initialFormState);
-
-  const handleChange = (event) => {
-    const value = event.target.value;
-    setFormData({
-      ...formData,
-      [event.target.name]: value,
-    });
-  };
-
-  const handleCancel = (event) => {
-    history.goBack();
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    await createTable(formData);
-    history.push(`/`);
-  };
+function TableForm({handleChange, handleCancel, handleSubmit, formData}) {
 
   return (
     <>
@@ -41,7 +13,6 @@ function TableForm() {
           name="table_name"
           id="table_name"
           type="text"
-          minLength="2"
           onChange={handleChange}
           value={formData.table_name}
           placeholder="Table Name"

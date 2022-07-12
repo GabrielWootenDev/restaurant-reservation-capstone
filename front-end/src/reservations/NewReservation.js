@@ -4,7 +4,12 @@ import ErrorAlert from "../layout/ErrorAlert";
 import ReservationForm from "./ReservationForm";
 import { createReservation } from "../utils/api";
 import { formatAsDate, formatAsTime } from "../utils/date-time";
-import { isOpenHours, isDatePast, isTimePast, isTuesday } from "./reservationValidation"
+import {
+  isOpenHours,
+  isDatePast,
+  isTimePast,
+  isTuesday,
+} from "./reservationValidation";
 import { today } from "../utils/date-time";
 
 function NewReservation({ setDate }) {
@@ -45,8 +50,8 @@ function NewReservation({ setDate }) {
     const newErrors = [];
     newErrors.splice();
     setError(() => [...newErrors]);
-    const reservationDate = formatAsDate(formData.reservation_date)
-    const reservationTime = formatAsTime(formData.reservation_time)
+    const reservationDate = formatAsDate(formData.reservation_date);
+    const reservationTime = formatAsTime(formData.reservation_time);
     try {
       isOpenHours(reservationTime);
     } catch (err) {
@@ -70,44 +75,21 @@ function NewReservation({ setDate }) {
     setError(() => [...newErrors]);
 
     if (newErrors.length <= 0) {
-      await createReservation(
-        {
-          ...formData,
-          mobile_number: `${formData.mobile_number[0]}${formData.mobile_number[1]}${formData.mobile_number[2]}-${formData.mobile_number[3]}${formData.mobile_number[4]}${formData.mobile_number[5]}-${formData.mobile_number[6]}${formData.mobile_number[7]}${formData.mobile_number[8]}${formData.mobile_number[9]}`,
-        },
-        abortController.signal
-      );
-      setDate(formData.reservation_date);
-      history.push(`/reservations`);
+      try {
+        await createReservation(
+          {
+            ...formData,
+            mobile_number: `${formData.mobile_number[0]}${formData.mobile_number[1]}${formData.mobile_number[2]}-${formData.mobile_number[3]}${formData.mobile_number[4]}${formData.mobile_number[5]}-${formData.mobile_number[6]}${formData.mobile_number[7]}${formData.mobile_number[8]}${formData.mobile_number[9]}`,
+          },
+          abortController.signal
+        );
+        setDate(formData.reservation_date);
+        history.push(`/reservations`);
+      } catch (err) {
+        setError(() => [error]);
+      }
     }
   };
-  /* const handleSubmit = async (event) => {
-    event.preventDefault();
-    const abortController = new AbortController();
-    
-    try {
-      await createReservation(
-        {
-          ...formData,
-          mobile_number: `${formData.mobile_number[0]}${formData.mobile_number[1]}${formData.mobile_number[2]}-${formData.mobile_number[3]}${formData.mobile_number[4]}${formData.mobile_number[5]}-${formData.mobile_number[6]}${formData.mobile_number[7]}${formData.mobile_number[8]}${formData.mobile_number[9]}`,
-        },
-        abortController.signal
-      );
-      setDate(formData.reservation_date);
-      history.push(`/reservations`);
-      // history.go(0);
-      // history.push(`/dashboard?date=${newReservation.reservation_date}`)
-    } catch (err) {
-      if (err.name !== "AbortError") {
-        setError(() => [err]);
-      }
-    } 
-
-    return () => {
-      abortController.abort();
-    };
-  };
-  */
 
   const handleCancel = (event) => {
     setFormData({ ...initialFormState });

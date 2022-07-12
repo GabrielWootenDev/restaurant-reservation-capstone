@@ -23,11 +23,11 @@ function SeatReservation() {
     loadReservation();
   }, [reservationId]);
 
-  //submit handler
   useEffect(() => {
     async function loadOpenTables() {
       const abortController = new AbortController();
       const result = await listOpenTables(abortController.signal);
+      result.sort((tableA, tableB) => tableA.table_name.localeCompare(tableB.table_name));
       setOpenTables(result);
       return () => abortController.abort();
     }

@@ -13,7 +13,10 @@ function isDatePast(date, time, today) {
 
 function isTuesday(date, time) {
   const testDate =  new Date(`${date} ${time}`)
+  const offset = testDate.getTimezoneOffset()
+  testDate.setHours(testDate.getHours() + (offset / 60));
   const error = { message: `Reservation must not be on a Tuesday.` };
+  console.log(testDate.getDay());
   if (testDate.getDay() === 2) {
     throw error;
   }
