@@ -22,7 +22,6 @@ function checkPastTime(req, res, next) {
     data["reservation_date"] + " " + data["reservation_time"]
   );
   const now = Date.now();
-  console.log(Date(now));
   reservationTime >= now
     ? next()
     : next({ status: 400, message: `Reservation must be on a future time.` });

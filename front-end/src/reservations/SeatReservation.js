@@ -16,7 +16,10 @@ function SeatReservation() {
   useEffect(() => {
     async function loadReservation() {
       const abortController = new AbortController();
-      const result = await readReservation(reservationId, abortController.signal);
+      const result = await readReservation(
+        reservationId,
+        abortController.signal
+      );
       setReservation(result);
       return () => abortController.abort();
     }
@@ -27,7 +30,9 @@ function SeatReservation() {
     async function loadOpenTables() {
       const abortController = new AbortController();
       const result = await listOpenTables(abortController.signal);
-      result.sort((tableA, tableB) => tableA.table_name.localeCompare(tableB.table_name));
+      result.sort((tableA, tableB) =>
+        tableA.table_name.localeCompare(tableB.table_name)
+      );
       setOpenTables(result);
       return () => abortController.abort();
     }
@@ -38,10 +43,10 @@ function SeatReservation() {
     const { value, name } = target;
     setFormData({
       ...formData,
-      reservation_id: reservation.reservation_id,
+      ...reservation,
       [name]: value,
     });
-    console.log(formData);
+    console.log(formData)
   };
 
   const submitHandler = async (event) => {
@@ -49,7 +54,7 @@ function SeatReservation() {
     const abortController = new AbortController();
     await updateTable(formData, abortController.signal);
     history.push("/reservations");
-  }
+  };
 
   const tableList = openTables.map((table) => {
     const overCapacity = Number(table.capacity) < Number(reservation.people);
@@ -66,10 +71,14 @@ function SeatReservation() {
 
   return (
     <>
-      <form className="d-flex flex-column container fluid justify-content-center col-md-5" onSubmit={submitHandler}>
+      <form
+        className="d-flex flex-column container fluid justify-content-center col-md-5"
+        onSubmit={submitHandler}
+      >
         <div className="form-group">
           <h1 className="h1 text-center">
-            Select Table for {reservation.last_name} party of {reservation.people}
+            Select Table for {reservation.last_name} party of{" "}
+            {reservation.people}
           </h1>
           <select
             className="form-control"

@@ -85,6 +85,7 @@ function NewReservation({ setDate }) {
         );
         setDate(formData.reservation_date);
         history.push(`/reservations`);
+        history.go(0);
       } catch (err) {
         setError(() => [error]);
       }
