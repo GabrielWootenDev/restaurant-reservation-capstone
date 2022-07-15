@@ -84,8 +84,7 @@ function NewReservation({ setDate }) {
           abortController.signal
         );
         setDate(formData.reservation_date);
-        history.push(`/reservations`);
-        history.go(0);
+        history.push(`/`);
       } catch (err) {
         setError(() => [error]);
       }

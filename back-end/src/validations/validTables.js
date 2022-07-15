@@ -1,14 +1,22 @@
 const service = require("../tables/tables.service");
+const reservationService = require("../reservations/reservations.service");
 
 function tableNameExists(req, res, next) {
-  const tableName = res.locals.newTable.table_name;
+  const tableName = res.locals.table.table_name;
   tableName && typeof tableName === "string"
     ? next()
     : next({ status: 400, message: `Table must include a table_name` });
 }
 
+function reservationIdExists(req, res, next) {
+  const reservationId = res.locals.table.reservation_id;
+  reservationId
+    ? next()
+    : next({ status: 400, message: `Must include a reservation_id` });
+}
+
 function validTableName(req, res, next) {
-  const tableName = res.locals.newTable.table_name;
+  const tableName = res.locals.table.table_name;
   tableName.length >= 2
     ? next()
     : next({
@@ -18,24 +26,26 @@ function validTableName(req, res, next) {
 }
 
 function validData(req, res, next) {
-  const newTable = req.body.data;
-  res.locals.newTable = newTable;
-  newTable ? next() : next({ status: 400, message: `Must include table data` });
+  const table = req.body.data;
+  res.locals.table = table;
+  table ? next() : next({ status: 400, message: `Must include table data` });
 }
 
 function capacityExists(req, res, next) {
-  const capacity = res.locals.newTable.capacity;
+  const capacity = res.locals.table.capacity;
   capacity && typeof capacity === "number" && capacity >= 1
     ? next()
-    : next({ status: 400, message: `Table must include a capacity of 1 or greater` });
+    : next({
+        status: 400,
+        message: `Table must include a capacity of 1 or greater`,
+      });
 }
 
 async function validTableId(req, res, next) {
   const { table_id } = req.params;
-  const data = await service.read(table_id);
-  res.locals.table = req.body.data;
-  res.locals.data = data;
-  data
+  const tableInfo = await service.read(table_id);
+  res.locals.tableInfo = tableInfo;
+  tableInfo
     ? next()
     : next({
         status: 404,
@@ -44,20 +54,35 @@ async function validTableId(req, res, next) {
 }
 
 function validCapacity(req, res, next) {
-  const { people } = res.locals.table;
-  const table = res.locals.data;
+  const { people } = res.locals.reservation;
+  const table = res.locals.tableInfo;
   table.capacity >= people
     ? next()
     : next({ status: 400, message: `Table capacity too small` });
 }
 
 function isOccupied(req, res, next) {
-  res.locals.data.reservation_id === null
-    ? next()
-    : next({
-        status: 400,
-        message: `${res.locals.data.table_name} is occupied, please select another table.`,
-      });
+  const { tableInfo } = res.locals;
+  if (!tableInfo.reservation_id) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: `${res.locals.tableInfo.table_name} is occupied, please select another table.`,
+  });
+}
+
+async function checkReservationExists(req, res, next) {
+  const { reservation_id } = req.body.data;
+  const reservation = await reservationService.read(Number(reservation_id));
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({
+    status: 404,
+    message: `Reservation ${reservation_id} does not exist`,
+  });
 }
 
 module.exports = {
@@ -67,5 +92,7 @@ module.exports = {
   isOccupied,
   validData,
   tableNameExists,
-	capacityExists,
+  capacityExists,
+  checkReservationExists,
+  reservationIdExists,
 };

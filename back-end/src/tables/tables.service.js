@@ -6,7 +6,7 @@ async function list() {
 }
 
 async function listOpen() {
-  const results = await knex("tables").select("*").whereNull("reservation_id");
+  const results = await knex("tables").select("*").whereNull("reservation_id").orderBy("table_name", "asc");
   return results;
 }
 

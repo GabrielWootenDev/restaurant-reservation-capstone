@@ -8,6 +8,7 @@ function SeatReservation() {
   const history = useHistory();
   const initialFormState = {
     table_id: null,
+    reservation_id: null
   };
   const [formData, setFormData] = useState(initialFormState);
 
@@ -30,9 +31,6 @@ function SeatReservation() {
     async function loadOpenTables() {
       const abortController = new AbortController();
       const result = await listOpenTables(abortController.signal);
-      result.sort((tableA, tableB) =>
-        tableA.table_name.localeCompare(tableB.table_name)
-      );
       setOpenTables(result);
       return () => abortController.abort();
     }
@@ -43,10 +41,9 @@ function SeatReservation() {
     const { value, name } = target;
     setFormData({
       ...formData,
-      ...reservation,
+      reservation_id: reservationId,
       [name]: value,
     });
-    console.log(formData)
   };
 
   const submitHandler = async (event) => {

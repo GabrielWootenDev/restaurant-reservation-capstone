@@ -15,7 +15,6 @@ const {
   checkOpenTime,
 } = require("../validations/validReservations");
 
-//refactor all code for single responsiblity and validation as a later time
 
 async function list(req, res) {
   const data = await service.list();

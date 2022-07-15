@@ -9,38 +9,62 @@ function NewTable() {
   const history = useHistory();
   const initialFormState = {
     table_name: "",
-    capacity: "",
+    capacity: 1,
   };
 
   const [formData, setFormData] = useState(initialFormState);
 
-  const handleChange = (event) => {
-    const value = event.target.value;
+  const handleChange = ({ target }) => {
+    const { type, value, name } = target;
     setFormData({
       ...formData,
-      [event.target.name]: value,
+      ...(type === "number" && { [name]: Number(value) }),
+      ...(type === "text" && { [name]: value }),
     });
   };
 
   const handleCancel = (event) => {
+    setFormData(initialFormState);
     history.goBack();
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-    await createTable(formData);
-    history.push(`/`);
-    } catch (err) {
-      setError(() => [err])
+    const abortController = new AbortController();
+    async function submitTable() {
+      try {
+        await createTable(formData, abortController.signal);
+        setFormData(initialFormState);
+        history.push("/");
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          setError(err);
+        }
+      }
     }
+
+    submitTable();
+    return () => {
+      abortController.abort();
+    };
   };
 
   return (
     <>
-      <h3>Create a table</h3>
-      <ErrorAlert error={error}/>
-			<TableForm handleChange={handleChange} handleCancel={handleCancel} handleSubmit={handleSubmit} formData={formData}/>
+      <div>
+        <h3>Create a new table</h3>
+      </div>
+      <div>
+        <ErrorAlert error={error} />
+      </div>
+      <div>
+        <TableForm
+          handleChange={handleChange}
+          handleCancel={handleCancel}
+          handleSubmit={handleSubmit}
+          formData={formData}
+        />
+      </div>
     </>
   );
 }

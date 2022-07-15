@@ -8,6 +8,8 @@ const {
   validData,
   tableNameExists,
   capacityExists,
+  checkReservationExists,
+  reservationIdExists,
 } = require("../validations/validTables");
 
 async function list(req, res) {
@@ -16,14 +18,13 @@ async function list(req, res) {
 }
 
 async function listOpen(req, res, next) {
-  const { status } = req.params;
   const result = await service.listOpen();
   res.json({ data: result });
 }
 
 async function create(req, res) {
-  const { newTable } = res.locals;
-  const data = await service.create(newTable);
+  const { table } = res.locals;
+  const data = await service.create(table);
   res.status(201).json({ data });
 }
 
@@ -31,16 +32,17 @@ async function update(req, res) {
   const table_id = req.params.table_id;
   const { reservation_id } = req.body.data;
   const data = await service.update(table_id, reservation_id);
-  res.sendStatus(204);
+  res.status(200).json({ data });
 }
 
-async function read(req, res) {
+function read(req, res) {
   const data = res.locals.data;
   res.status(200).json({ data });
 }
 
 module.exports = {
-  list: [asyncErrorBoundary(listOpen), asyncErrorBoundary(list)],
+  list: [asyncErrorBoundary(list)],
+  listOpen: [asyncErrorBoundary(listOpen)],
   create: [
     validData,
     tableNameExists,
@@ -49,10 +51,13 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   update: [
+    validData,
+    reservationIdExists,
     asyncErrorBoundary(validTableId),
+    asyncErrorBoundary(checkReservationExists),
     validCapacity,
     isOccupied,
     asyncErrorBoundary(update),
   ],
-  read: [asyncErrorBoundary(validTableId), asyncErrorBoundary(read)],
+  read: [asyncErrorBoundary(validTableId), read],
 };
