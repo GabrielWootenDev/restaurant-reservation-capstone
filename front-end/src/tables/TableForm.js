@@ -1,6 +1,6 @@
 import React from "react";
 
-function TableForm({ handleChange, handleCancel, handleSubmit, formData }) {
+function TableForm({ handleChange, handleCancel, handleSubmit }) {
   return (
     <>
       <div>
