@@ -52,7 +52,7 @@ function NewReservation() {
     setError(() => [...newErrors]);
     const reservationDate = formatAsDate(formData.reservation_date);
     const reservationTime = formatAsTime(formData.reservation_time);
-    const mobileNumber = formData.mobile_number.replaceAll("-", "");
+    const mobileNumber = formData.mobile_number.replaceAll(/[^0-9]/g, "");
     try {
       isOpenHours(reservationTime);
     } catch (err) {
