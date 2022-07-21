@@ -56,7 +56,7 @@ describe("US-01 - Create and list reservations - E2E", () => {
         path: ".screenshots/us-01-submit-after.png",
         fullPage: true,
       });
-
+      
       await expect(page).toMatch(lastName);
     });
 

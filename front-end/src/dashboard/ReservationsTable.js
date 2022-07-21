@@ -28,36 +28,42 @@ function ReservationsTable({ reservations }) {
             </tr>
           </thead>
           <tbody>
-            {reservations.map((reservation) => (
-              <tr key={reservation.reservation_id}>
-                <td className="text-center align-middle">
-                  <div>{reservation.reservation_time}</div>
-                </td>
-                <td className="text-center align-middle">
-                  <div>{reservation.first_name}</div>
-                </td>
-                <td className="text-center align-middle">
-                  <div>{reservation.last_name}</div>
-                </td>
-                <td className="text-center align-middle">
-                  <div>{reservation.mobile_number}</div>
-                </td>
-                <td className="text-center align-middle">
-                  <div>{reservation.people}</div>
-                </td>
-                <td className="text-center align-middle">
-                  <div>
-                    <a
-                      className="btn btn-danger"
-                      href={`/reservations/${reservation.reservation_id}/seat`}
-                      role="button"
-                    >
-                      Seat
-                    </a>
-                  </div>
-                </td>
-              </tr>
-            ))}
+            {reservations.map((reservation) => {
+              const reservation_id = reservation.reservation_id;
+              return (
+                <tr key={reservation.reservation_id}>
+                  <td className="text-center align-middle">
+                    <div>{reservation.reservation_time}</div>
+                  </td>
+                  <td className="text-center align-middle">
+                    <div>{reservation.first_name}</div>
+                  </td>
+                  <td className="text-center align-middle">
+                    <div>{reservation.last_name}</div>
+                  </td>
+                  <td className="text-center align-middle">
+                    <div>{reservation.mobile_number}</div>
+                  </td>
+                  <td className="text-center align-middle">
+                    <div>{reservation.people}</div>
+                  </td>
+                  <td className="text-center align-middle">
+                    {
+                      //reservation.status === "booked" ? (
+
+                      <a
+                        className="btn btn-primary"
+                        href={`/reservations/${reservation_id}/seat`}
+                      >
+                        Seat
+                      </a>
+
+                      //  ): null
+                    }
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

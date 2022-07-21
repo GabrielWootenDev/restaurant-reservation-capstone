@@ -1,6 +1,6 @@
 import { today, previous, next } from "../utils/date-time";
 
-function DashboardNav({ date, setDate }) {
+function DashboardNav({ date, history}) {
   return (
     <div className="d-flex">
       <div className="d-sm-flex col mb-3">
@@ -13,21 +13,21 @@ function DashboardNav({ date, setDate }) {
           <button
             type="button"
             className="btn btn-secondary mx-2"
-            onClick={() => setDate(previous(date))}
+            onClick={() => {history.push(`/dashboard?date=${previous(date)}`)}}
           >
             Previous Day
           </button>
           <button
             type="button"
             className="btn btn-dark mx-2"
-            onClick={() => setDate(next(date))}
+            onClick={() => {history.push(`/dashboard?date=${next(date)}`)}}
           >
             Next Day
           </button>
           <button
             type="button"
             className="btn btn-info mx-2"
-            onClick={() => setDate(today())}
+            onClick={() => {history.push(`/dashboard?date=${today()}`)}}
           >
             Today
           </button>

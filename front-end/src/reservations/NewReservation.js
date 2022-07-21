@@ -12,7 +12,7 @@ import {
 } from "./reservationValidation";
 import { today } from "../utils/date-time";
 
-function NewReservation({ setDate }) {
+function NewReservation() {
   const [error, setError] = useState([]);
 
   const history = useHistory();
@@ -52,6 +52,7 @@ function NewReservation({ setDate }) {
     setError(() => [...newErrors]);
     const reservationDate = formatAsDate(formData.reservation_date);
     const reservationTime = formatAsTime(formData.reservation_time);
+    const mobileNumber = formData.mobile_number.replaceAll("-", "");
     try {
       isOpenHours(reservationTime);
     } catch (err) {
@@ -79,12 +80,11 @@ function NewReservation({ setDate }) {
         await createReservation(
           {
             ...formData,
-            mobile_number: `${formData.mobile_number[0]}${formData.mobile_number[1]}${formData.mobile_number[2]}-${formData.mobile_number[3]}${formData.mobile_number[4]}${formData.mobile_number[5]}-${formData.mobile_number[6]}${formData.mobile_number[7]}${formData.mobile_number[8]}${formData.mobile_number[9]}`,
+            mobile_number: `${mobileNumber[0]}${mobileNumber[1]}${mobileNumber[2]}-${mobileNumber[3]}${mobileNumber[4]}${mobileNumber[5]}-${mobileNumber[6]}${mobileNumber[7]}${mobileNumber[8]}${mobileNumber[9]}`,
           },
           abortController.signal
         );
-        setDate(formData.reservation_date);
-        history.push(`/`);
+        history.push(`/dashboard?date=${reservationDate}`);
       } catch (err) {
         setError(() => [error]);
       }
