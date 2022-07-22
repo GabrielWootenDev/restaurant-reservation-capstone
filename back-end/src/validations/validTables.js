@@ -85,6 +85,24 @@ async function checkReservationExists(req, res, next) {
   });
 }
 
+function isNotOccupied(req, res, next) {
+  const { tableInfo } = res.locals;
+  if (tableInfo.reservation_id) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: `${res.locals.tableInfo.table_name} is not occupied!`,
+  });
+}
+function isReservationSeated(req, res, next) {
+  const { status } = res.locals.reservation;
+  status === "seated"
+    ? next({ status: 400, message: `Reservation status is already ${status}` })
+    : next();
+}
+
+
 module.exports = {
   validTableName,
   validTableId,
@@ -95,4 +113,6 @@ module.exports = {
   capacityExists,
   checkReservationExists,
   reservationIdExists,
+  isNotOccupied,
+  isReservationSeated,
 };

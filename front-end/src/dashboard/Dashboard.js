@@ -4,7 +4,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsTable from "./ReservationsTable";
 import DashboardNav from "./DashboardNav";
 import SeatingTable from "./SeatingTable";
-import { listReservations, listTables } from "../utils/api";
+import { listReservations, listTables, unseatTable } from "../utils/api";
 import useQuery from "../utils/useQuery";
 import { today } from "../utils/date-time";
 import sortReservations from "../reservations/sortReservations";
@@ -33,7 +33,7 @@ function Dashboard() {
     checkQuery();
   }, [query, date]);
 
-    useEffect(() => {
+  useEffect(() => {
     async function loadTables() {
       const abortController = new AbortController();
       const result = await listTables(abortController.signal);
@@ -44,7 +44,6 @@ function Dashboard() {
 
     loadTables();
   }, []);
-
 
   useEffect(() => {
     async function loadDashboard() {
@@ -60,16 +59,31 @@ function Dashboard() {
       return () => abortController.abort();
     }
     loadDashboard();
-  }, [date]);
+  }, [date, reservations.length]);
+
+  async function finishTable(tableId) {
+    if (
+      window.confirm(
+        "Is this table ready to seat new guests? This cannot be undone."
+      )
+    ) {
+      await unseatTable(tableId);
+      history.go(0);
+    }
+  }
 
   return (
     <main className="container-fluid p-0">
       <ErrorAlert error={reservationsError} />
       <h1 className="d-flex justify-content-center">Dashboard</h1>
-      <DashboardNav history={history} date={date}/>
-      <div className="d-md-flex col-md p-0">
-        <ReservationsTable reservations={reservations} />
-        <SeatingTable tables={tables} />
+      <DashboardNav history={history} date={date} />
+      <div>
+        {reservations.length !== 0 ? (
+          <ReservationsTable reservations={reservations} />
+        ) : (
+          <h3 className="text-center">No Reservations Found</h3>
+        )}
+        <SeatingTable tables={tables} finishTable={finishTable} />
       </div>
     </main>
   );

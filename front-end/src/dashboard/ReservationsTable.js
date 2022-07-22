@@ -3,8 +3,8 @@ import React from "react";
 function ReservationsTable({ reservations }) {
   return (
     <>
-      <div>
-        <table className="table table-dark table-hover word-break col-md table-responsive-lg">
+      <div className="card col-sm-12 mx-auto border-0">
+        <table className="table table-dark table-hover word-break table-responsive-lg">
           <thead>
             <tr>
               <th scope="col" className="text-center align-middle">
@@ -24,6 +24,9 @@ function ReservationsTable({ reservations }) {
               </th>
               <th scope="col" className="text-center align-middle">
                 Seat at Table?
+              </th>
+              <th scope="col" className="text-center align-middle">
+                Status
               </th>
             </tr>
           </thead>
@@ -48,18 +51,20 @@ function ReservationsTable({ reservations }) {
                     <div>{reservation.people}</div>
                   </td>
                   <td className="text-center align-middle">
-                    {
-                      //reservation.status === "booked" ? (
-
+                    {reservation.status === "booked" ? (
                       <a
                         className="btn btn-primary"
                         href={`/reservations/${reservation_id}/seat`}
                       >
                         Seat
                       </a>
-
-                      //  ): null
-                    }
+                    ) : null}
+                  </td>
+                  <td
+                    className="text-center align-middle"
+                    data-reservation-id-status={reservation.reservation_id}
+                  >
+                    {reservation.status}
                   </td>
                 </tr>
               );

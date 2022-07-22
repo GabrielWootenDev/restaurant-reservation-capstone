@@ -1,4 +1,5 @@
 const service = require("./tables.service");
+const reservationsService = require("../reservations/reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const {
   validTableName,
@@ -10,6 +11,8 @@ const {
   capacityExists,
   checkReservationExists,
   reservationIdExists,
+  isNotOccupied,
+  isReservationSeated,
 } = require("../validations/validTables");
 
 async function list(req, res) {
@@ -29,15 +32,42 @@ async function create(req, res) {
 }
 
 async function update(req, res) {
-  const table_id = req.params.table_id;
-  const { reservation_id } = req.body.data;
+  const { table_id } = res.locals.tableInfo;
+  const { reservation_id } = res.locals.reservation;
   const data = await service.update(table_id, reservation_id);
   res.status(200).json({ data });
+}
+
+async function updateReservationStatus(req, res, next) {
+  const reservation = res.locals.reservation;
+  const newStatus =
+    reservation.status === "booked"
+      ? "seated"
+      : reservation.status === "seated" && "finished";
+  const updatedReservation = {
+    ...reservation,
+    status: newStatus,
+  };
+  await reservationsService.update(updatedReservation);
+  next();
 }
 
 function read(req, res) {
   const data = res.locals.data;
   res.status(200).json({ data });
+}
+
+function finishTable(req, res, next) {
+  const tableInfo = res.locals.tableInfo;
+  const data = service.unseatTable(tableInfo.table_id);
+  res.status(200).json({ data });
+}
+
+async function readReservationInfo(req, res, next) {
+  const { reservation_id } = res.locals.tableInfo;
+  const reservation = await reservationsService.read(reservation_id);
+  res.locals.reservation = reservation;
+  next();
 }
 
 module.exports = {
@@ -55,9 +85,19 @@ module.exports = {
     reservationIdExists,
     asyncErrorBoundary(validTableId),
     asyncErrorBoundary(checkReservationExists),
+    isReservationSeated,
     validCapacity,
     isOccupied,
+    asyncErrorBoundary(updateReservationStatus),
     asyncErrorBoundary(update),
   ],
+
   read: [asyncErrorBoundary(validTableId), read],
+  finishTable: [
+    asyncErrorBoundary(validTableId),
+    isNotOccupied,
+    asyncErrorBoundary(readReservationInfo),
+    asyncErrorBoundary(updateReservationStatus),
+    asyncErrorBoundary(finishTable),
+  ],
 };

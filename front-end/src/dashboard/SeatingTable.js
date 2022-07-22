@@ -1,9 +1,9 @@
-function SeatingTable({ tables }) {
+function SeatingTable({ tables, finishTable }) {
 
   return (
     <>
-      <div className="col-md-4">
-        <h4 className="d-flex justify-content-center">Seating</h4>
+      <div className="card col-sm-6 mx-auto border-0">
+        <h4 className="card-title text-center">Seating</h4>
 
         <table className="table table-dark table-hover word-break">
           <thead>
@@ -13,6 +13,9 @@ function SeatingTable({ tables }) {
               </th>
               <th scope="col" className="text-center align-middle">
                 Table Status
+              </th>
+              <th scope="col" className="text-center align-middle">
+                Finish Table?
               </th>
             </tr>
           </thead>
@@ -29,6 +32,11 @@ function SeatingTable({ tables }) {
                   >
                     Occupied
                   </td>
+                  <td className="text-center align-middle">
+                    <button className="btn btn-primary" data-table-id-finish={table.table_id} onClick={() => finishTable(table.table_id)} >
+                      Finish
+                    </button>
+                  </td>
                 </tr>
               ) : (
                 <tr key={table.table_id}>
@@ -40,6 +48,9 @@ function SeatingTable({ tables }) {
                     className="text-center align-middle text-success"
                   >
                     Free
+                  </td>
+                  <td className="text-center align-middle">
+                    No Party
                   </td>
                 </tr>
               )

@@ -27,7 +27,6 @@ function checkPastTime(req, res, next) {
     : next({ status: 400, message: `Reservation must be on a future time.` });
 }
 
-
 function checkOpenTime(req, res, next) {
   const { reservation_time } = req.body.data;
   const testTime = reservation_time;
@@ -36,7 +35,34 @@ function checkOpenTime(req, res, next) {
   if (testTime >= openTime && testTime <= closeTime) {
     return next();
   }
-  next({ status: 400, message: `Reservation must be between 10:30 AM and 9:30 PM` });
+  next({
+    status: 400,
+    message: `Reservation must be between 10:30 AM and 9:30 PM`,
+  });
+}
+
+function checkReservationStatus(req, res, next) {
+  const status = res.locals.reservation.status;
+  status === "finished" || (status !== "booked" && status !== "seated")
+    ? next({ status: 400, message: `Reservation is ${status}` })
+    : next();
+}
+
+function checkNewStatus(req, res, next) {
+  const status = req.body.data.status;
+  status === "booked" || status === "seated" || status === "finished"
+    ? next()
+    : next({
+        status: 400,
+        message: `reservation status "${status}" is unknown`,
+      });
+}
+
+function checkValidStatus(req, res, next) {
+  const { status } = req.body.data;
+  status === "booked" || !status
+    ? next()
+    : next({ status: 400, message: `Status must be "booked", not ${status}` });
 }
 
 module.exports = {
@@ -44,4 +70,7 @@ module.exports = {
   checkFutureDate,
   checkPastTime,
   checkOpenTime,
+  checkReservationStatus,
+  checkValidStatus,
+  checkNewStatus,
 };

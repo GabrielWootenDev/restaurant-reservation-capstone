@@ -7,7 +7,7 @@ async function list() {
 }
 
 async function listOnDate(date) {
-    const results = await knex("reservations").select("*").where({reservation_date: date}).orderBy("reservation_time", "asc");
+    const results = await knex("reservations").select("*").whereNot({status: "finished"}).where({reservation_date: date}).orderBy("reservation_time", "asc");
     return results;
 }
 
@@ -21,9 +21,16 @@ async function create(reservation) {
     return results[0];
 }
 
+async function update(updatedReservation) {
+    const results = await knex("reservations").where({reservation_id: updatedReservation.reservation_id}).update(updatedReservation, "*");
+    return results[0];
+}
+
+
 module.exports = {
     list,
     listOnDate,
     read,
     create,
+    update,
 }

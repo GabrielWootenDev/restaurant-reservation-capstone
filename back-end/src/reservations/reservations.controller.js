@@ -13,6 +13,9 @@ const {
   checkFutureDate,
   checkPastTime,
   checkOpenTime,
+  checkReservationStatus,
+  checkValidStatus,
+  checkNewStatus,
 } = require("../validations/validReservations");
 
 
@@ -49,6 +52,17 @@ async function validReservationId(req, res, next) {
   }
 }
 
+async function updateReservationStatus(req, res, next) {
+  const reservation = res.locals.reservation;
+  const newStatus = req.body.data.status;
+  const updatedReservation = {
+    ...reservation,
+    status: newStatus,
+  }
+  const data = await service.update(updatedReservation);
+  res.status(200).json({ data });
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   listOnDate: [asyncErrorBoundary(listOnDate)],
@@ -60,10 +74,12 @@ module.exports = {
     bodyDataHasDate,
     bodyDataHasTime,
     bodyDataHasPeople,
+    checkValidStatus,
     checkOpen,
     checkFutureDate,
     checkPastTime,
     checkOpenTime,
     asyncErrorBoundary(create),
   ],
+  update: [asyncErrorBoundary(validReservationId), checkNewStatus, checkReservationStatus, asyncErrorBoundary(updateReservationStatus)],
 };

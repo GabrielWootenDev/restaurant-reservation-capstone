@@ -5,36 +5,39 @@ function TableForm({ handleChange, handleCancel, handleSubmit }) {
     <>
       <div>
         <form
-          className="form-group d-flex flex-column container fluid justify-content-center col-4"
+          className="form-group d-flex flex-column container-fluid justify-content-center col col-md-6"
           onSubmit={handleSubmit}
         >
-          <label>
-            <h3>Table Name:</h3>
-          </label>
-          <input
-            className="form-control"
-            name="table_name"
-            id="table_name"
-            type="text"
-            min={2}
-            onChange={handleChange}
-            placeholder="Table Name"
-            required
-          />
-
-          <label>
-            <h3>Capacity:</h3>
-          </label>
-          <input
-            className="form-control"
-            name="capacity"
-            id="capacity"
-            type="number"
-            min={1}
-            placeholder={1}
-            onChange={handleChange}
-            required
-          />
+          <div className="m-2">
+            <label>
+              <h2>Table Name:</h2>
+            </label>
+            <input
+              className="form-control"
+              name="table_name"
+              id="table_name"
+              type="text"
+              min={2}
+              onChange={handleChange}
+              placeholder="Table Name"
+              required
+            />
+          </div>
+          <div className="m-2">
+            <label>
+              <h2>Capacity:</h2>
+            </label>
+            <input
+              className="form-control"
+              name="capacity"
+              id="capacity"
+              type="number"
+              min={1}
+              placeholder={1}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
           <button
             type="button"

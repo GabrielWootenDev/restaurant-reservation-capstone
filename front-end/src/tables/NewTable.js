@@ -51,7 +51,7 @@ function NewTable() {
 
   return (
     <>
-      <div>
+      <div className="text-center">
         <h3>Create a new table</h3>
       </div>
       <div>
