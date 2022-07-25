@@ -8,7 +8,7 @@ require('dotenv').config();
 const path = require("path");
 
 const {
-  DATABASE_URL,
+  DATABASE_URL = "postgres://tnswgzyn:4ZY3T5lQGvPVYYKbmUAunBg1Vaigm0MH@queenie.db.elephantsql.com/tnswgzyn",
   DATABASE_URL_DEVELOPMENT,
   DATABASE_URL_TEST, 
   DATABASE_URL_PREVIEW,
