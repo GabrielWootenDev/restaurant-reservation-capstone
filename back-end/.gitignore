@@ -14,7 +14,6 @@
 
 # misc
 .DS_Store
-.env
 .env.*
 !.env.sample
 .env.local
