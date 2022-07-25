@@ -47,7 +47,7 @@ function SeatingTable({ tables, finishTable }) {
                     data-table-id-status={`${table.table_id}`}
                     className="text-center align-middle text-success"
                   >
-                    Open
+                    Free
                   </td>
                   <td className="text-center align-middle">
                   </td>

@@ -8,7 +8,8 @@ async function list() {
 async function listOnDate(date) {
   const results = await knex("reservations")
     .select("*")
-    .whereNot({ status: "finished", status: "cancelled" })
+    .whereNot({ status: "finished"})
+    .whereNot({status: "cancelled"} )
     .where({ reservation_date: date })
     .orderBy("reservation_time", "asc");
   return results;
