@@ -135,15 +135,24 @@ export async function unseatTable(tableId, signal) {
   return await fetchJson(url, options);
 }
 
-/* export async function updateSeating({reservation_id, status}, signal) {
-  const newStatus = status;
-  const url = `${API_BASE_URL}/reservations/${reservation_id}/status`
+export async function updateReservation(reservation, reservation_id, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({data: { status: newStatus } }),
+    body: JSON.stringify({data: reservation}),
+    signal
+  }
+  return await fetchJson(url, options)
+}
+
+export async function cancelReservation(reservation_id, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { status: "cancelled" } }),
     signal
   }
   return await fetchJson(url, options);
 }
-*/

@@ -50,7 +50,7 @@ function checkReservationStatus(req, res, next) {
 
 function checkNewStatus(req, res, next) {
   const status = req.body.data.status;
-  status === "booked" || status === "seated" || status === "finished"
+  status === "booked" || status === "seated" || status === "finished" || status === "cancelled"
     ? next()
     : next({
         status: 400,
@@ -65,6 +65,13 @@ function checkValidStatus(req, res, next) {
     : next({ status: 400, message: `Status must be "booked", not ${status}` });
 }
 
+function checkBooked(req, res, next) {
+  const { status } = res.locals.data;
+  status === "booked" || !status
+    ? next()
+    : next({ status: 400, message: `Status must be "booked", not ${status}` }); 
+}
+
 
 
 module.exports = {
@@ -75,4 +82,5 @@ module.exports = {
   checkReservationStatus,
   checkValidStatus,
   checkNewStatus,
+  checkBooked,
 };

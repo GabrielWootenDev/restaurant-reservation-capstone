@@ -68,21 +68,30 @@ function ReservationsTable({ reservations, handleCancellation }) {
                     ) : null}
                   </td>
                   <td className="text-center align-middle">
+                  {reservation.status === "booked" ? (
                     <a
                       className="btn btn-warning"
                       href={`/reservations/${reservation_id}/edit`}
                     >
                       Edit
-                    </a>
+                    </a> ) : null}
                   </td>
                   <td
                     className="text-center align-middle"
-                    data-reservation-id-status={reservation.reservation_id}
+                    data-reservation-id-status={reservation_id}
                   >
                     {reservation.status}
                   </td>
-                  <td className="text-center align-middle" onClick={handleCancellation}>
-                    <button className="btn btn-danger">Cancel</button>
+                  <td className="text-center align-middle">
+                    {reservation.status && (
+                      <button
+                        className="btn btn-danger"
+                        data-reservation-id-cancel={reservation.reservation_id}
+                        onClick={() => handleCancellation(reservation_id)}
+                      >
+                        Cancel
+                      </button>
+                    )}
                   </td>
                 </tr>
               );

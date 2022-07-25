@@ -4,7 +4,12 @@ import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsTable from "./ReservationsTable";
 import DashboardNav from "./DashboardNav";
 import SeatingTable from "./SeatingTable";
-import { listReservations, listTables, unseatTable } from "../utils/api";
+import {
+  cancelReservation,
+  listReservations,
+  listTables,
+  unseatTable,
+} from "../utils/api";
 import useQuery from "../utils/useQuery";
 import { today } from "../utils/date-time";
 import sortReservations from "../reservations/sortReservations";
@@ -18,7 +23,8 @@ import { useHistory } from "react-router";
  */
 
 function Dashboard() {
-  const [date, setDate] = useState(today());
+  const currentDate = today()
+  const [date, setDate] = useState(currentDate);
   const query = useQuery();
   const history = useHistory();
   const [reservations, setReservations] = useState([]);
@@ -28,7 +34,7 @@ function Dashboard() {
   useEffect(() => {
     function checkQuery() {
       const dateQuery = query.get("date");
-      dateQuery ? setDate(dateQuery) : setDate(today());
+      dateQuery && setDate(dateQuery);
     }
     checkQuery();
   }, [query, date]);
@@ -72,13 +78,16 @@ function Dashboard() {
     }
   }
 
-  async function handleCancellation(tableId) {
+  async function handleCancellation(reservation_id) {
     if (
       window.confirm(
         "Do you want to cancel this reservation? This cannot be undone."
       )
     ) {
-      //await change status to cancelled
+      const abortController = new AbortController();
+
+      await cancelReservation(reservation_id, abortController.signal);
+
       history.go(0);
     }
   }
@@ -90,7 +99,10 @@ function Dashboard() {
       <DashboardNav history={history} date={date} />
       <div>
         {reservations.length !== 0 ? (
-          <ReservationsTable reservations={reservations} handleCancellation={handleCancellation}/>
+          <ReservationsTable
+            reservations={reservations}
+            handleCancellation={handleCancellation}
+          />
         ) : (
           <h3 className="text-center">No Reservations Found</h3>
         )}

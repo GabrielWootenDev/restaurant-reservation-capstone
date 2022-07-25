@@ -16,8 +16,9 @@ const {
   checkReservationStatus,
   checkValidStatus,
   checkNewStatus,
-  mobileNumberExists,
+  checkBooked,
 } = require("../validations/validReservations");
+const { RowDescriptionMessage } = require("pg-protocol/dist/messages");
 
 async function list(req, res) {
   const data = await service.list();
@@ -60,6 +61,7 @@ async function read(req, res) {
 async function validReservationId(req, res, next) {
   const reservationId = req.params.reservation_id;
   const data = await service.read(reservationId);
+
   if (data) {
     res.locals.reservation = data;
     next();
@@ -76,6 +78,17 @@ async function updateReservationStatus(req, res, next) {
     status: newStatus,
   };
   const data = await service.update(updatedReservation);
+  res.status(200).json({ data });
+}
+
+async function update(req, res) {
+  const  updatedReservation  = req.body.data;
+  const { reservation_id } = res.locals.reservation;
+  const reservation = {
+    ...updatedReservation,
+    reservation_id: reservation_id
+  }
+  const data = await service.update(reservation)
   res.status(200).json({ data });
 }
 
@@ -100,10 +113,25 @@ module.exports = {
     checkOpenTime,
     asyncErrorBoundary(create),
   ],
-  update: [
+  updateStatus: [
     asyncErrorBoundary(validReservationId),
     checkNewStatus,
     checkReservationStatus,
     asyncErrorBoundary(updateReservationStatus),
   ],
+  update: [    
+    bodyDataHasFirstName,
+    bodyDataHasLastName,
+    bodyDataHasMobile,
+    bodyDataHasDate,
+    bodyDataHasTime,
+    bodyDataHasPeople,
+    asyncErrorBoundary(validReservationId),
+    checkBooked,
+    checkOpen,
+    checkFutureDate,
+    checkPastTime,
+    checkOpenTime,
+    asyncErrorBoundary(update)
+  ]
 };

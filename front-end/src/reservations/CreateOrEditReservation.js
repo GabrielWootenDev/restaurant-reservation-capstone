@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationForm from "./ReservationForm";
-import { createReservation, readReservation } from "../utils/api";
+import { createReservation, readReservation, updateReservation } from "../utils/api";
 import { formatAsDate, formatAsTime } from "../utils/date-time";
 import {
   isOpenHours,
@@ -68,6 +68,7 @@ function CreateOrEditReservation() {
         name === "reservation_time" && { [name]: formatAsTime(value) }),
       ...((type === "text" || type === "tel") && { [name]: value }),
     });
+    
   };
   //handleSubmit this will create a new reservation then render the dashboard with useHistory,
 
@@ -110,23 +111,24 @@ function CreateOrEditReservation() {
           },
           abortController.signal
         );
-        history.push(`/dashboard?date=${formData.reservation_date}`);
+        history.push(`/dashboard?date=${formatAsDate(formData.reservation_date)}`);
       } catch (err) {
-        setError(() => [error]);
+        setError(() => [err]);
       }
     }
     if (newErrors.length <= 0 && reservation_id) {
       try {
-        await createReservation(
+        await updateReservation(
           {
             ...formData,
             mobile_number: `${mobileNumber[0]}${mobileNumber[1]}${mobileNumber[2]}-${mobileNumber[3]}${mobileNumber[4]}${mobileNumber[5]}-${mobileNumber[6]}${mobileNumber[7]}${mobileNumber[8]}${mobileNumber[9]}`,
           },
+          reservation_id,
           abortController.signal
         );
         history.push(`/dashboard?date=${formData.reservation_date}`);
       } catch (err) {
-        setError(() => [error]);
+        setError(() => [err]);
       }
     }
   };
