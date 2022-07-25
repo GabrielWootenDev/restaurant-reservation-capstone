@@ -65,6 +65,8 @@ function checkValidStatus(req, res, next) {
     : next({ status: 400, message: `Status must be "booked", not ${status}` });
 }
 
+
+
 module.exports = {
   checkOpen,
   checkFutureDate,

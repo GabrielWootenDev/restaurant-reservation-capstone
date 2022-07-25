@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router";
+import React, { useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationForm from "./ReservationForm";
-import { createReservation } from "../utils/api";
+import { createReservation, readReservation } from "../utils/api";
 import { formatAsDate, formatAsTime } from "../utils/date-time";
 import {
   isOpenHours,
@@ -12,8 +12,9 @@ import {
 } from "./reservationValidation";
 import { today } from "../utils/date-time";
 
-function NewReservation() {
+function CreateOrEditReservation() {
   const [error, setError] = useState([]);
+  const { reservation_id } = useParams();
 
   const history = useHistory();
   const initialFormState = {
@@ -26,6 +27,33 @@ function NewReservation() {
   };
 
   const [formData, setFormData] = useState({ ...initialFormState });
+
+  useEffect(() => {
+    if (reservation_id) {
+      async function loadReservation() {
+        const abortController = new AbortController();
+        try {
+          const result = await readReservation(
+            reservation_id,
+            abortController.signal
+          );
+          setFormData({
+            first_name: result.first_name,
+            last_name: result.last_name,
+            mobile_number: result.mobile_number,
+            reservation_date: formatAsDate(result.reservation_date),
+            reservation_time: formatAsTime(result.reservation_time),
+            people: result.people,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+        return () => abortController.abort();
+      }
+
+      loadReservation();
+    }
+  }, [reservation_id]);
 
   //when anything is input into either field the value is stored in formData state and that input value changes to the same as the form with the based on the target key.
 
@@ -50,32 +78,30 @@ function NewReservation() {
     const newErrors = [];
     newErrors.splice();
     setError(() => [...newErrors]);
-    const reservationDate = formatAsDate(formData.reservation_date);
-    const reservationTime = formatAsTime(formData.reservation_time);
     const mobileNumber = formData.mobile_number.replaceAll(/[^0-9]/g, "");
     try {
-      isOpenHours(reservationTime);
+      isOpenHours(formData.reservation_time);
     } catch (err) {
       newErrors.push(err);
     }
     try {
-      isDatePast(reservationDate, reservationTime, day);
+      isDatePast(formData.reservation_date, formData.reservation_time, day);
     } catch (err) {
       newErrors.push(err);
     }
     try {
-      isTimePast(reservationDate, reservationTime);
+      isTimePast(formData.reservation_date, formData.reservation_time);
     } catch (err) {
       newErrors.push(err);
     }
     try {
-      isTuesday(reservationDate, reservationTime);
+      isTuesday(formData.reservation_date, formData.reservation_time);
     } catch (err) {
       newErrors.push(err);
     }
     setError(() => [...newErrors]);
 
-    if (newErrors.length <= 0) {
+    if (newErrors.length <= 0 && !reservation_id) {
       try {
         await createReservation(
           {
@@ -84,7 +110,21 @@ function NewReservation() {
           },
           abortController.signal
         );
-        history.push(`/dashboard?date=${reservationDate}`);
+        history.push(`/dashboard?date=${formData.reservation_date}`);
+      } catch (err) {
+        setError(() => [error]);
+      }
+    }
+    if (newErrors.length <= 0 && reservation_id) {
+      try {
+        await createReservation(
+          {
+            ...formData,
+            mobile_number: `${mobileNumber[0]}${mobileNumber[1]}${mobileNumber[2]}-${mobileNumber[3]}${mobileNumber[4]}${mobileNumber[5]}-${mobileNumber[6]}${mobileNumber[7]}${mobileNumber[8]}${mobileNumber[9]}`,
+          },
+          abortController.signal
+        );
+        history.push(`/dashboard?date=${formData.reservation_date}`);
       } catch (err) {
         setError(() => [error]);
       }
@@ -114,4 +154,4 @@ function NewReservation() {
   );
 }
 
-export default NewReservation;
+export default CreateOrEditReservation;

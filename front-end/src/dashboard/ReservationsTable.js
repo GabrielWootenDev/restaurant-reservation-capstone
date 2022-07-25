@@ -1,6 +1,6 @@
 import React from "react";
 
-function ReservationsTable({ reservations }) {
+function ReservationsTable({ reservations, handleCancellation }) {
   return (
     <>
       <div className="card col-sm-12 mx-auto border-0">
@@ -26,7 +26,13 @@ function ReservationsTable({ reservations }) {
                 Seat at Table?
               </th>
               <th scope="col" className="text-center align-middle">
+                Change?
+              </th>
+              <th scope="col" className="text-center align-middle">
                 Status
+              </th>
+              <th scope="col" className="text-center align-middle">
+                Cancel
               </th>
             </tr>
           </thead>
@@ -50,6 +56,7 @@ function ReservationsTable({ reservations }) {
                   <td className="text-center align-middle">
                     <div>{reservation.people}</div>
                   </td>
+
                   <td className="text-center align-middle">
                     {reservation.status === "booked" ? (
                       <a
@@ -60,11 +67,22 @@ function ReservationsTable({ reservations }) {
                       </a>
                     ) : null}
                   </td>
+                  <td className="text-center align-middle">
+                    <a
+                      className="btn btn-warning"
+                      href={`/reservations/${reservation_id}/edit`}
+                    >
+                      Edit
+                    </a>
+                  </td>
                   <td
                     className="text-center align-middle"
                     data-reservation-id-status={reservation.reservation_id}
                   >
                     {reservation.status}
+                  </td>
+                  <td className="text-center align-middle" onClick={handleCancellation}>
+                    <button className="btn btn-danger">Cancel</button>
                   </td>
                 </tr>
               );

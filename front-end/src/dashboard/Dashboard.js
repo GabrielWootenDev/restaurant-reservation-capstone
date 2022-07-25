@@ -72,6 +72,17 @@ function Dashboard() {
     }
   }
 
+  async function handleCancellation(tableId) {
+    if (
+      window.confirm(
+        "Do you want to cancel this reservation? This cannot be undone."
+      )
+    ) {
+      //await change status to cancelled
+      history.go(0);
+    }
+  }
+
   return (
     <main className="container-fluid p-0">
       <ErrorAlert error={reservationsError} />
@@ -79,7 +90,7 @@ function Dashboard() {
       <DashboardNav history={history} date={date} />
       <div>
         {reservations.length !== 0 ? (
-          <ReservationsTable reservations={reservations} />
+          <ReservationsTable reservations={reservations} handleCancellation={handleCancellation}/>
         ) : (
           <h3 className="text-center">No Reservations Found</h3>
         )}
