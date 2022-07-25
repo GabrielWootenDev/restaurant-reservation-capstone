@@ -1,6 +1,6 @@
 import React from "react";
 
-function ReservationsTable({ reservations, handleCancellation }) {
+function ReservationsTable({ reservations, handleCancellation, history }) {
   return (
     <>
       <div className="card col-sm-12 mx-auto border-0">
@@ -87,7 +87,7 @@ function ReservationsTable({ reservations, handleCancellation }) {
                       <button
                         className="btn btn-danger"
                         data-reservation-id-cancel={reservation.reservation_id}
-                        onClick={() => handleCancellation(reservation_id)}
+                        onClick={() => handleCancellation(reservation_id, history)}
                       >
                         Cancel
                       </button>

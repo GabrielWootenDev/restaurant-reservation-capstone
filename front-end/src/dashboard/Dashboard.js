@@ -14,6 +14,7 @@ import useQuery from "../utils/useQuery";
 import { today } from "../utils/date-time";
 import sortReservations from "../reservations/sortReservations";
 import { useHistory } from "react-router";
+import { handleCancellation } from "../reservations/handleCancellation";
 
 /**
  * Defines the dashboard page.
@@ -78,19 +79,6 @@ function Dashboard() {
     }
   }
 
-  async function handleCancellation(reservation_id) {
-    if (
-      window.confirm(
-        "Do you want to cancel this reservation? This cannot be undone."
-      )
-    ) {
-      const abortController = new AbortController();
-
-      await cancelReservation(reservation_id, abortController.signal);
-
-      history.go(0);
-    }
-  }
 
   return (
     <main className="container-fluid p-0">
@@ -102,6 +90,7 @@ function Dashboard() {
           <ReservationsTable
             reservations={reservations}
             handleCancellation={handleCancellation}
+            history={history}
           />
         ) : (
           <h3 className="text-center">No Reservations Found</h3>
