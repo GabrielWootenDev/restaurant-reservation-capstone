@@ -5,7 +5,6 @@ import ReservationsTable from "./ReservationsTable";
 import DashboardNav from "./DashboardNav";
 import SeatingTable from "./SeatingTable";
 import {
-  cancelReservation,
   listReservations,
   listTables,
   unseatTable,
