@@ -71,6 +71,7 @@ export async function listReservations(params, signal) {
 }
 
 export async function listSearch(mobile_number, signal) {
+  //sends a request to the API to retrieve all reservations with the given mobile_number
   const url = new URL(
     `${API_BASE_URL}/reservations?mobile_number=${mobile_number}`
   );
@@ -81,6 +82,7 @@ export async function listSearch(mobile_number, signal) {
 }
 
 export async function createReservation(reservation, signal) {
+  //sends a request to create a new reservation in the reservations table with the givien reservation data object
   const url = `${API_BASE_URL}/reservations`;
   const options = {
     method: "POST",
@@ -92,21 +94,25 @@ export async function createReservation(reservation, signal) {
 }
 
 export async function readReservation(reservationId, signal) {
+  //sends a request to the API to retrieve a specific reservation from a reservation id
   const url = `${API_BASE_URL}/reservations/${reservationId}`;
   return await fetchJson(url, { headers, signal }, []);
 }
 
 export async function listTables(signal) {
+  //sends a request to the API to get all the tables
   const url = `${API_BASE_URL}/tables`;
   return await fetchJson(url, { headers, signal }, []);
 }
 
 export async function listOpenTables(signal) {
+  //sends a request to the API to get the tables with the open status
   const url = `${API_BASE_URL}/tables/open`;
   return await fetchJson(url, { headers, signal }, []);
 }
 
 export async function createTable(table, signal) {
+  //takes the given table object and sends the table data in the body of a request to the url with the POST update method
   const url = `${API_BASE_URL}/tables`;
   const options = {
     method: "POST",
@@ -118,6 +124,7 @@ export async function createTable(table, signal) {
 }
 
 export async function seatTable(table, signal) {
+  //takes the given table object and sends the table data in the body of a request to the url with the PUT update method
   const url = `${API_BASE_URL}/tables/${table.table_id}/seat`;
   const options = {
     method: "PUT",
@@ -129,6 +136,7 @@ export async function seatTable(table, signal) {
 }
 
 export async function unseatTable(tableId, signal) {
+  //takes the given table id and sends the finished status in the body of a request to the url with the DELETE method
   const url = `${API_BASE_URL}/tables/${tableId}/seat`;
   const options = {
     method: "DELETE",
@@ -140,6 +148,7 @@ export async function unseatTable(tableId, signal) {
 }
 
 export async function updateReservation(reservation, reservation_id, signal) {
+  //takes the given reservation and id and sends the reservation data in the body of a request to the url with the PUT update method
   const url = `${API_BASE_URL}/reservations/${reservation_id}`;
   const options = {
     method: "PUT",
@@ -151,6 +160,7 @@ export async function updateReservation(reservation, reservation_id, signal) {
 }
 
 export async function cancelReservation(reservation_id, signal) {
+  //takes the given reservation id and sends the cancelled status in the body of a request to the url with the PUT update method
   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
   const options = {
     method: "PUT",

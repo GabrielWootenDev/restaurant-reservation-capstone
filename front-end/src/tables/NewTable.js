@@ -15,6 +15,7 @@ function NewTable() {
   const [formData, setFormData] = useState(initialFormState);
 
   const handleChange = ({ target }) => {
+    //updates form data whenever a change is made to the form using field type and value
     const { type, value, name } = target;
     setFormData({
       ...formData,
@@ -32,8 +33,10 @@ function NewTable() {
     event.preventDefault();
     const abortController = new AbortController();
     async function submitTable() {
+      //when submitted, newTable data is sent to the API with createTable to create a table entry
       try {
         await createTable(formData, abortController.signal);
+        //form data is reset to default
         setFormData(initialFormState);
         history.push("/");
       } catch (err) {
