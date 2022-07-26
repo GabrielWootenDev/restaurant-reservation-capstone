@@ -119,8 +119,10 @@ function CreateOrEditReservation() {
           abortController.signal
         );
         history.push(`/dashboard?date=${formatAsDate(formData.reservation_date)}`);
-      } catch (err) {
-        setError(() => [err]);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          setError(error);
+        }
       }
     }
     if (newErrors.length <= 0 && reservation_id) {
@@ -135,8 +137,10 @@ function CreateOrEditReservation() {
           abortController.signal
         );
         history.push(`/dashboard?date=${formData.reservation_date}`);
-      } catch (err) {
-        setError(() => [err]);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          setError(error);
+        }
       }
     }
   };

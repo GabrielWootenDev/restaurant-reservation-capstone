@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import { listOpenTables, readReservation, seatTable} from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
+import { listOpenTables, readReservation, seatTable } from "../utils/api";
 
 function SeatReservation() {
   const [openTables, setOpenTables] = useState([]);
   const [reservation, setReservation] = useState([]);
+  const [error, setError] = useState(null);
   const history = useHistory();
   const initialFormState = {
     table_id: null,
     reservation_id: null,
-    status: "seated"
+    status: "seated",
   };
   const [formData, setFormData] = useState(initialFormState);
 
@@ -55,7 +57,13 @@ function SeatReservation() {
     //updates table data with the API whenever a reservation is seated and redirects back to the dashboard
     event.preventDefault();
     const abortController = new AbortController();
-    await seatTable(formData, abortController.signal);
+    try {
+      await seatTable(formData, abortController.signal);
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        setError(error);
+      }
+    }
     history.push("/reservations");
   };
 
@@ -100,6 +108,7 @@ function SeatReservation() {
           Cancel
         </button>
       </form>
+      <ErrorAlert error={error} />
     </>
   );
 }

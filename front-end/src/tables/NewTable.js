@@ -39,9 +39,9 @@ function NewTable() {
         //form data is reset to default
         setFormData(initialFormState);
         history.push("/");
-      } catch (err) {
-        if (err.name !== "AbortError") {
-          setError(err);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          setError(error);
         }
       }
     }
