@@ -16,6 +16,8 @@ function SeatReservation() {
   const reservationId = useParams().reservation_id;
 
   useEffect(() => {
+    //page refreshes when reservationId changes
+    //on page refresh loads reservation from API and sets as state;
     async function loadReservation() {
       const abortController = new AbortController();
       const result = await readReservation(
@@ -29,6 +31,7 @@ function SeatReservation() {
   }, [reservationId]);
 
   useEffect(() => {
+    //on page refresh loads open tables from API and sets as state;
     async function loadOpenTables() {
       const abortController = new AbortController();
       const result = await listOpenTables(abortController.signal);
@@ -39,6 +42,7 @@ function SeatReservation() {
   }, []);
 
   const changeHandler = ({ target }) => {
+    //updates form data whenever a change is made to the form
     const { value, name } = target;
     setFormData({
       ...formData,
@@ -48,6 +52,7 @@ function SeatReservation() {
   };
 
   const submitHandler = async (event) => {
+    //updates table data with the API whenever a reservation is seated and redirects back to the dashboard
     event.preventDefault();
     const abortController = new AbortController();
     await seatTable(formData, abortController.signal);
@@ -55,6 +60,7 @@ function SeatReservation() {
   };
 
   const tableList = openTables.map((table) => {
+    //lists all open tables as options for the select dropdown, any table with insufficient capacity is disabled, shown but unselectable
     const overCapacity = Number(table.capacity) < Number(reservation.people);
     return (
       <option

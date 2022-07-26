@@ -10,7 +10,6 @@ function SearchPage() {
   const [foundReservations, setFoundReservations] = useState(null);
   const history = useHistory();
 
-
   const handleChange = ({ target }) => {
     const { value } = target;
     setMobileNumber({ mobile_number: value });
@@ -19,11 +18,13 @@ function SearchPage() {
   const submitSearch = async (event) => {
     event.preventDefault();
     const abortController = new AbortController();
+    //when submitted this form fetchs reservations from the API with mobile_numbers matching the number enterered;
     try {
       const results = await listReservations(
         mobileNumber,
         abortController.signal
       );
+      //sets the results of the API fetch as foundReservations in state
       setFoundReservations(results);
     } catch (error) {
       console.log(error);
@@ -36,11 +37,18 @@ function SearchPage() {
     <>
       <SearchForm handleChange={handleChange} submitSearch={submitSearch} />
       {foundReservations && foundReservations.length > 0 && (
-        <ReservationsTable reservations={foundReservations} handleCancellation={handleCancellation} history={history}/>
+        <ReservationsTable
+          reservations={foundReservations}
+          handleCancellation={handleCancellation}
+          history={history}
+        />
       )}
-      {foundReservations && foundReservations.length === 0 && (
-        <h3 className="text-center">"No reservations found"</h3>
-      )}
+      {
+        //if foundReservations is not null (not initial page render) and it's array is empty this is displayed, only displayed after a search
+        foundReservations && foundReservations.length === 0 && (
+          <h3 className="text-center">"No reservations found"</h3>
+        )
+      }
     </>
   );
 }
