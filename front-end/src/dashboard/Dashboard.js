@@ -23,8 +23,7 @@ import { handleCancellation } from "../reservations/handleCancellation";
  */
 
 function Dashboard() {
-  const currentDate = today()
-  const [date, setDate] = useState(currentDate);
+  const [date, setDate] = useState(today());
   const query = useQuery();
   const history = useHistory();
   const [reservations, setReservations] = useState([]);
