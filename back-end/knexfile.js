@@ -15,7 +15,6 @@ const {
   DEBUG,
 } = process.env;
 
-console.log(process.env);
 
 module.exports = {
   development: {
