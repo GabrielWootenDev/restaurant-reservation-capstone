@@ -63,18 +63,19 @@ function validCapacity(req, res, next) {
 
 function isOccupied(req, res, next) {
   const { tableInfo } = res.locals;
-  if (!tableInfo.reservation_id) {
-    return next();
-  }
-  next({
-    status: 400,
-    message: `${res.locals.tableInfo.table_name} is occupied, please select another table.`,
-  });
+  !tableInfo.reservation_id
+    ? next()
+    : next({
+        status: 400,
+        message: `${res.locals.tableInfo.table_name} is occupied, please select another table.`,
+      });
 }
 
 async function checkReservationExists(req, res, next) {
   const { reservation_id } = req.body.data;
+  //sets reservation to the response from the reservationService;
   const reservation = await reservationService.read(Number(reservation_id));
+  //if the reservation exists it is passed through locals
   if (reservation) {
     res.locals.reservation = reservation;
     return next();
@@ -87,16 +88,17 @@ async function checkReservationExists(req, res, next) {
 
 function isNotOccupied(req, res, next) {
   const { tableInfo } = res.locals;
-  if (tableInfo.reservation_id) {
-    return next();
-  }
-  next({
-    status: 400,
-    message: `${res.locals.tableInfo.table_name} is not occupied!`,
-  });
+  tableInfo.reservation_id
+    ? next()
+    : next({
+        status: 400,
+        message: `${res.locals.tableInfo.table_name} is not occupied!`,
+      });
 }
+
 function isReservationSeated(req, res, next) {
   const { status } = res.locals.reservation;
+  //when seating a reservation if status of reservation is already seated sends error
   status === "seated"
     ? next({ status: 400, message: `Reservation status is already ${status}` })
     : next();

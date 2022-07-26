@@ -8,6 +8,7 @@ async function list() {
 async function listOnDate(date) {
   const results = await knex("reservations")
     .select("*")
+    //the whereNot methods exlude results in the search that have finished or cancelled statuses
     .whereNot({ status: "finished"})
     .whereNot({status: "cancelled"} )
     .where({ reservation_date: date })

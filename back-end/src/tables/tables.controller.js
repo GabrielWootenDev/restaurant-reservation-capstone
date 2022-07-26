@@ -40,6 +40,7 @@ async function update(req, res) {
 
 async function updateReservationStatus(req, res, next) {
   const reservation = res.locals.reservation;
+  //newStatus is updated to be the next valid status in the chain of if booked -> seated, if seated -> finished based from the previous reservation status
   const newStatus =
     reservation.status === "booked"
       ? "seated"

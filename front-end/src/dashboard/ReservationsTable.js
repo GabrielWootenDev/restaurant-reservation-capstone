@@ -37,7 +37,9 @@ function ReservationsTable({ reservations, handleCancellation, history }) {
             </tr>
           </thead>
           <tbody>
-            {reservations.map((reservation) => {
+            {
+              //returns a table row for each reservation in reservations array
+            reservations.map((reservation) => {
               const reservation_id = reservation.reservation_id;
               return (
                 <tr key={reservation.reservation_id}>
@@ -58,7 +60,9 @@ function ReservationsTable({ reservations, handleCancellation, history }) {
                   </td>
 
                   <td className="text-center align-middle">
-                    {reservation.status === "booked" ? (
+                    {
+                    //this button only shows when the reservation has the appropriate status
+                    reservation.status === "booked" ? (
                       <a
                         className="btn btn-primary"
                         href={`/reservations/${reservation_id}/seat`}
@@ -68,7 +72,9 @@ function ReservationsTable({ reservations, handleCancellation, history }) {
                     ) : null}
                   </td>
                   <td className="text-center align-middle">
-                  {reservation.status === "booked" ? (
+                  {
+                  //this button only shows when the reservation has the appropriate status
+                  reservation.status === "booked" ? (
                     <a
                       className="btn btn-warning"
                       href={`/reservations/${reservation_id}/edit`}
@@ -83,7 +89,9 @@ function ReservationsTable({ reservations, handleCancellation, history }) {
                     {reservation.status}
                   </td>
                   <td className="text-center align-middle">
-                    {reservation.status && (
+                    {
+                    //this button only shows when the reservation has the appropriate status
+                    reservation.status && (
                       <button
                         className="btn btn-danger"
                         data-reservation-id-cancel={reservation.reservation_id}

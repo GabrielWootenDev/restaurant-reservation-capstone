@@ -20,7 +20,9 @@ function SeatingTable({ tables, finishTable }) {
             </tr>
           </thead>
           <tbody>
-            {tables.map((table) =>
+            {
+            //when the button is clicked it calls the finishTable function to update the state of the reservation and table
+            tables.map((table) =>
               table.reservation_id !== null ? (
                 <tr key={table.table_id}>
                   <td className="text-center align-middle">

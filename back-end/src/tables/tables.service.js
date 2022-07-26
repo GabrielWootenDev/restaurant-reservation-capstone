@@ -17,6 +17,7 @@ async function create(newTable) {
 
 async function update(table_id, reservation_id) {
   await knex("tables").select("*").where({table_id: table_id}).update({reservation_id: reservation_id}, "*").returning("*");
+  //the results are joined along the reservation ids to return a comprehensive reservation list for easier data relation
   const results =  await knex("tables").join("reservations", {"reservations.reservation_id": "tables.reservation_id"}).select("*").where({table_id: table_id});
   return results[0];
 }
