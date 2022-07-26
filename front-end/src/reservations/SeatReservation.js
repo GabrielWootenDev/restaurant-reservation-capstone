@@ -22,11 +22,17 @@ function SeatReservation() {
     //on page refresh loads reservation from API and sets as state;
     async function loadReservation() {
       const abortController = new AbortController();
-      const result = await readReservation(
-        reservationId,
-        abortController.signal
-      );
-      setReservation(result);
+      try {
+        const result = await readReservation(
+          reservationId,
+          abortController.signal
+        );
+        setReservation(result);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          setError(error);
+        }
+      }
       return () => abortController.abort();
     }
     loadReservation();
@@ -36,8 +42,14 @@ function SeatReservation() {
     //on page refresh loads open tables from API and sets as state;
     async function loadOpenTables() {
       const abortController = new AbortController();
-      const result = await listOpenTables(abortController.signal);
-      setOpenTables(result);
+      try {
+        const result = await listOpenTables(abortController.signal);
+        setOpenTables(result);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          setError(error);
+        }
+      }
       return () => abortController.abort();
     }
     loadOpenTables();

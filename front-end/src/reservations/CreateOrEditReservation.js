@@ -47,7 +47,7 @@ function CreateOrEditReservation() {
             people: result.people,
           });
         } catch (error) {
-          console.log(error);
+          setError(()=> [error]);
         }
         return () => abortController.abort();
       }

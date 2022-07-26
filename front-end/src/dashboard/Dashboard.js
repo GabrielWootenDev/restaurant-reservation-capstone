@@ -45,8 +45,13 @@ function Dashboard() {
 
       return () => abortController.abort();
     }
-
-    loadTables();
+    try {
+      loadTables();
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        setReservationsError(error);
+      }
+    }
   }, [tables.length]);
 
   useEffect(() => {
@@ -61,7 +66,9 @@ function Dashboard() {
         const sortedReservations = await sortReservations(result);
         setReservations(() => sortedReservations);
       } catch (error) {
-        setReservationsError(() => [error]);
+        if (error.name !== "AbortError") {
+          setReservationsError(() => [error]);
+        }
       }
       return () => abortController.abort();
     }
@@ -75,8 +82,14 @@ function Dashboard() {
         "Is this table ready to seat new guests? This cannot be undone."
       )
     ) {
-      await unseatTable(tableId);
-      history.go(0);
+      try {
+        await unseatTable(tableId);
+        history.go(0);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          setReservationsError(error);
+        }
+      }
     }
   }
 
