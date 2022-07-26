@@ -1,8 +1,12 @@
 function checkOpen(req, res, next) {
   const { data = {} } = res.locals.data;
-  const reservationDay = new Date(data["reservation_date"]);
-  // in getDay() 1 === tuesday even though it should be 2
-  reservationDay.getDay() !== 1
+  const reservationDay = new Date(`${data["reservation_date"]} ${data["reservation_time"]}`);
+  //offset is the difference of your current timezone and UTC
+  const offset = reservationDay.getTimezoneOffset()
+  //setHours changes your reservation into local time
+  reservationDay.setHours(reservationDay.getHours() + (offset / 60));
+  // in getDay() 2 === tuesday 
+  reservationDay.getDay() !== 2
     ? next()
     : next({ status: 400, message: `Restaurant is closed on Tuesday.` });
 }

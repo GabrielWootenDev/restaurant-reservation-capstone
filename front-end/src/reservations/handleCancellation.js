@@ -1,6 +1,7 @@
 import { cancelReservation } from "../utils/api";
 
 export async function handleCancellation(reservation_id, history) {
+  // calls cancelReservation if confirmation is accepted
   if (
     window.confirm(
       "Do you want to cancel this reservation? This cannot be undone."

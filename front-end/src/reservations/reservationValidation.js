@@ -1,9 +1,10 @@
-
 function isDatePast(date, time, today) {
   const newDate = new Date(`${date} ${time}`);
-  const offset = newDate.getTimezoneOffset()
+  //offset is the difference of your current timezone and UTC
+  const offset = newDate.getTimezoneOffset();
   const todayDate = new Date(today);
-  todayDate.setHours(todayDate.getHours() + (offset / 60));
+  //setHours changes todays date into local time
+  todayDate.setHours(todayDate.getHours() + offset / 60);
   const error = { message: "Reservation must be on a future date" };
   if (newDate < todayDate) {
     throw error;
@@ -12,7 +13,11 @@ function isDatePast(date, time, today) {
 }
 
 function isTuesday(date, time) {
-  const testDate =  new Date(`${date} ${time}`)
+  const testDate = new Date(`${date} ${time}`);
+  //offset is the difference of your current timezone and UTC
+  const offset = testDate.getTimezoneOffset();
+  //setHours changes the testDate into local time
+  testDate.setHours(testDate.getHours() + offset / 60);
   const error = { message: `Reservation must not be on a Tuesday.` };
   if (testDate.getDay() === 2) {
     throw error;
@@ -21,11 +26,15 @@ function isTuesday(date, time) {
 }
 
 function isTimePast(date, time) {
-  const reservationTime = Date.parse(date + " " + time);
+  const reservationTime = new Date(`${date} ${time}`);
+  //offset is the difference of your current timezone and UTC
+  const offset = reservationTime.getTimezoneOffset();
+  //setHours changes the reservation time into local time
+  reservationTime.setHours(reservationTime.getHours() + offset / 60);
   const now = Date.now();
   const error = { message: `Reservation must be at a future time` };
 
-  if (reservationTime < now) {
+  if (Date.parse(reservationTime) < now) {
     throw error;
   }
   return false;
@@ -35,19 +44,12 @@ function isOpenHours(time) {
   const error = {
     message: `Reservations must be between 10:30 AM and 9:30 PM`,
   };
-  const reservationTime = time.split(":");
-  const open = "10:30:00".split(":");
-  const lastReservation = "21:30:00".split(":");
+  const reservationTime = time;
+  //open and last reservation are the restaurant hours
+  const open = "10:30";
+  const lastReservation = "21:30";
 
-  const openSeconds = parseInt(open[0] * 3600 + open[1] * 60);
-  const lastReservationSeconds = parseInt(
-    lastReservation[0] * 3600 + lastReservation[1] * 60);
-  const reservationTimeSeconds = parseInt(
-    reservationTime[0] * 3600 + reservationTime[1] * 60);
-  if (
-    reservationTimeSeconds < openSeconds ||
-    reservationTimeSeconds > lastReservationSeconds
-  ) {
+  if (reservationTime <= open || reservationTime >= lastReservation) {
     throw error;
   }
   return false;
@@ -57,5 +59,5 @@ module.exports = {
   isDatePast,
   isTuesday,
   isTimePast,
-  isOpenHours
+  isOpenHours,
 };

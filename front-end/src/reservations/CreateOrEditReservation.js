@@ -14,6 +14,7 @@ import { today } from "../utils/date-time";
 
 function CreateOrEditReservation() {
   const [error, setError] = useState(null);
+  //sets reservation_id if it exists in params
   const { reservation_id } = useParams();
 
   const history = useHistory();
@@ -70,17 +71,20 @@ function CreateOrEditReservation() {
     });
     
   };
-  
-  //handleSubmit this will create a new reservation then render the dashboard with useHistory,
+
 
   const handleSubmit = async (event) => {
+    // creates a new reservation then renders the dashboard with useHistory
     event.preventDefault();
     const abortController = new AbortController();
     const day = today();
     const newErrors = [];
     newErrors.splice();
+    //splicing newErrors this way and then setting errors to newErrors clears the errors at the beginning of every submit
     setError(() => [...newErrors]);
+    //the mobile_number is reformated to remove all character that arent a number before submitting to allow inputs of xxx-xxx-xxx and xxxxxxxxx and (xxx) xxx-xxxx
     const mobileNumber = formData.mobile_number.replaceAll(/[^0-9]/g, "");
+    //each validation is tested and if an error is returned it is added to newErrors to be rendered as a list of errors with the errors state
     try {
       isOpenHours(formData.reservation_time);
     } catch (err) {
@@ -101,9 +105,11 @@ function CreateOrEditReservation() {
     } catch (err) {
       newErrors.push(err);
     }
+    //sets all validations errors into errors state
     setError(() => [...newErrors]);
 
     if (newErrors.length <= 0 && !reservation_id) {
+      //if reservation_id doesn't exists this is a new reservations and createReservation is called
       try {
         await createReservation(
           {
@@ -118,6 +124,7 @@ function CreateOrEditReservation() {
       }
     }
     if (newErrors.length <= 0 && reservation_id) {
+      //if reservation_id does exist this is an existing reservation and updateReservation is called
       try {
         await updateReservation(
           {
@@ -135,6 +142,7 @@ function CreateOrEditReservation() {
   };
 
   const handleCancel = (event) => {
+    //sets formState back to default and returns to the previous page
     setFormData({ ...initialFormState });
     history.goBack();
   };
