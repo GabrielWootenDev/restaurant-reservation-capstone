@@ -51,7 +51,7 @@ function SeatReservation() {
     event.preventDefault();
     const abortController = new AbortController();
     await seatTable(formData, abortController.signal);
-    history.push("/reservations");
+    history.goBack(1);
   };
 
   const tableList = openTables.map((table) => {

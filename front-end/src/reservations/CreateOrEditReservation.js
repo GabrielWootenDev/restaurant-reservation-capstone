@@ -13,7 +13,7 @@ import {
 import { today } from "../utils/date-time";
 
 function CreateOrEditReservation() {
-  const [error, setError] = useState([]);
+  const [error, setError] = useState(null);
   const { reservation_id } = useParams();
 
   const history = useHistory();
