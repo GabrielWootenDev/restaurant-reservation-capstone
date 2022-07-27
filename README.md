@@ -43,7 +43,7 @@ The create reservation page contains a form with fields to enter all the informa
 
 The same page is used when editing a reservation and when doing so the form will be prefilled with the information from the chosen reservation.
 
-![image]()
+![image](https://github.com/GabrielWootenDev/restaurant-reservation-project/blob/e59f2a1a5a467b77587b39795bd6040ab9309c0e/ReadMe-screenshots/create-edit-reservation.png)
 
 
 
