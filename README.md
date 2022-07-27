@@ -37,6 +37,15 @@ When there are no results for a givin mobile number the page is displayed as bel
 
 ![image](https://github.com/GabrielWootenDev/restaurant-reservation-project/blob/6dfd50b0c0e2cd3766d3b4e2a0d85ea538872905/ReadMe-screenshots/search-no-results.png)
 
+### New Reservation / Edit Reservation
+
+The create reservation page contains a form with fields to enter all the information necessary to create a reservation; First Name, Last Name, Mobile Number, Reservation Date, Reservation Time, and Party Size / Number of People.
+
+The same page is used when editing a reservation and when doing so the form will be prefilled with the information from the chosen reservation.
+
+![image]()
+
+
 
 # Technical Information
 
