@@ -54,7 +54,7 @@ The New Table page contains a form with fields for table name and capacity.
 
 The table name must be longer than 2 characters and the capacity 1 or greater.
 
-![image]()
+![image](https://github.com/GabrielWootenDev/restaurant-reservation-project/blob/8c3705cfecc98a222ded5a91b507ce6c396af8c3/ReadMe-screenshots/new-table.png)
 
 
 # Technical Information
