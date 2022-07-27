@@ -75,8 +75,8 @@ https://gw-restaurant-res-backend.herokuapp.com
             "reservation_date": "2022-01-01",
             "reservation_time": "00:00",
             "people": number of people,
+          }
         }
-      }
 
 ### /reservations?date={insertDateHere}
 
@@ -100,8 +100,8 @@ https://gw-restaurant-res-backend.herokuapp.com
             "reservation_date": "2022-01-01",
             "reservation_time": "00:00",
             "people": insert number of people,
+          }
         }
-      }
 
 ### /reservations/{reservations_id}/status
 
@@ -110,8 +110,8 @@ https://gw-restaurant-res-backend.herokuapp.com
         {
           "data": {
             "status": "newStatus,
+          }
         }
-      }
 
 ### /tables
 
@@ -123,9 +123,8 @@ https://gw-restaurant-res-backend.herokuapp.com
           "data": {
             "table_name": "insert table name",
             "capacity": insert number of maximum occupants,
+          }
         }
-      }
-
 
 ### /tables/open
 
@@ -139,13 +138,13 @@ https://gw-restaurant-res-backend.herokuapp.com
 
 - GET - Retrieves the information for the selected table_id
 
-- PUT - Updates the table with the associated table_id with the reservation that is seating at it from the body data 
+- PUT - Updates the table with the associated table_id with the reservation that is seating at it from the body data
 
         {
           "data": {
             "reservation_id": insert reservation_id,
+          }
         }
-      }
 
 - DELETE - Removes the reservation_id related to the table_id and updates the associated reservations status to "finished"
 
