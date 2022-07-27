@@ -45,6 +45,7 @@ async function validTableId(req, res, next) {
   const { table_id } = req.params;
   const tableInfo = await service.read(table_id);
   res.locals.tableInfo = tableInfo;
+  res.locals.data = tableInfo
   tableInfo
     ? next()
     : next({

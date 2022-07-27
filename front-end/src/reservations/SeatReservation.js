@@ -23,6 +23,7 @@ function SeatReservation() {
     async function loadReservation() {
       const abortController = new AbortController();
       try {
+        setError(null);
         const result = await readReservation(
           reservationId,
           abortController.signal
@@ -43,6 +44,7 @@ function SeatReservation() {
     async function loadOpenTables() {
       const abortController = new AbortController();
       try {
+        setError(null);
         const result = await listOpenTables(abortController.signal);
         setOpenTables(result);
       } catch (error) {
@@ -70,6 +72,7 @@ function SeatReservation() {
     event.preventDefault();
     const abortController = new AbortController();
     try {
+      setError(null);
       await seatTable(formData, abortController.signal);
     } catch (error) {
       if (error.name !== "AbortError") {
