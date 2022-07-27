@@ -17,7 +17,25 @@ This application allows any user or restaurant to create, manage, and view reser
 ### Dashboard 
 This dashboard contains a table for reservations, a table for the list of tables, and  a navigation bar to show the selected date and to move to the previous, next or today's date.
 
+Each reservation has a button to seat, edit, and cancel the reservation.
+
+Each table has a button to finish the reservation.
+
 ![image](https://github.com/GabrielWootenDev/restaurant-reservation-project/blob/0b53d3e7eb29083bd855b8b86b9f238dfedf5475/ReadMe-screenshots/Dashboard.png)
+
+### Search Page
+
+The searchpage contains a form with a field to enter a mobile number and a button to initiate a search for all reservations with that mobile number.
+
+![image](insert search page ss here)
+
+This is the page with a valid mobile number, it shows the same table as the dashboard but only filled with the reservations belonging to that mobile number.
+
+![image](insert with results here)
+
+When there are no results for a givin mobile number the page is displayed as below.
+
+![image](insert with no results here)
 
 
 # Technical Information
