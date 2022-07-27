@@ -17,7 +17,7 @@ This application allows any user or restaurant to create, manage, and view reser
 ### Dashboard 
 This dashboard contains a table for reservations, a table for the list of tables, and  a navigation bar to show the selected date and to move to the previous, next or today's date.
 
-![Image]()
+![image](https://github.com/GabrielWootenDev/restaurant-reservation-project/blob/0b53d3e7eb29083bd855b8b86b9f238dfedf5475/ReadMe-screenshots/Dashboard.png)
 
 
 # Technical Information
