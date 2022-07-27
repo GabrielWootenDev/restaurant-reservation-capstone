@@ -12,7 +12,7 @@ This application allows any user or restaurant to create, manage, and view reser
 - Finishing a reservation will reopen the table assigned to the reservation. 
 - Reservations can be searched by mobile number and every reservation associated with that number will be displayed regardless of it's status.
 
-## Functionality
+## Client Functionality
 
 ### Dashboard 
 This dashboard contains a table for reservations, a table for the list of tables, and  a navigation bar to show the selected date and to move to the previous, next or today's date.
@@ -43,8 +43,18 @@ The create reservation page contains a form with fields to enter all the informa
 
 The same page is used when editing a reservation and when doing so the form will be prefilled with the information from the chosen reservation.
 
+In both cases appopriate errors will display on the page
+when submitting if any exists to help users correct mistakes before the reservation is finalized.
+
 ![image](https://github.com/GabrielWootenDev/restaurant-reservation-project/blob/e59f2a1a5a467b77587b39795bd6040ab9309c0e/ReadMe-screenshots/create-edit-reservation.png)
 
+### New Table
+
+The New Table page contains a form with fields for table name and capacity.
+
+The table name must be longer than 2 characters and the capacity 1 or greater.
+
+![image]()
 
 
 # Technical Information
