@@ -27,15 +27,15 @@ Each table has a button to finish the reservation.
 
 The searchpage contains a form with a field to enter a mobile number and a button to initiate a search for all reservations with that mobile number.
 
-![image](insert search page ss here)
+![image](https://github.com/GabrielWootenDev/restaurant-reservation-project/blob/6dfd50b0c0e2cd3766d3b4e2a0d85ea538872905/ReadMe-screenshots/search-page.png)
 
 This is the page with a valid mobile number, it shows the same table as the dashboard but only filled with the reservations belonging to that mobile number.
 
-![image](insert with results here)
+![image](https://github.com/GabrielWootenDev/restaurant-reservation-project/blob/6dfd50b0c0e2cd3766d3b4e2a0d85ea538872905/ReadMe-screenshots/search-page-results.png)
 
 When there are no results for a givin mobile number the page is displayed as below.
 
-![image](insert with no results here)
+![image](https://github.com/GabrielWootenDev/restaurant-reservation-project/blob/6dfd50b0c0e2cd3766d3b4e2a0d85ea538872905/ReadMe-screenshots/search-no-results.png)
 
 
 # Technical Information
