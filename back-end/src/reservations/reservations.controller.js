@@ -30,7 +30,6 @@ async function listFromQuery(req, res) {
   res.json({ data });
 }
 
-
 // validateQuery checks the existing query and passes the appropriate data based on type of query to the next function via locals.
 async function validateQuery(req, res, next) {
   if (req.query.mobile_number) {
@@ -47,8 +46,10 @@ async function validateQuery(req, res, next) {
     res.locals.data = await service.listOnDate(date);
     next();
   }
-  if (!req.query.date && !req.query.mobile_number)
-    next({ status: 400, message: `Query ${req.query.date} is invalid` });
+  if (!req.query.date && !req.query.mobile_number) {
+    res.locals.data = await service.list();
+    next();
+  }
 }
 
 async function create(req, res) {
@@ -88,23 +89,20 @@ async function updateReservationStatus(req, res, next) {
 }
 
 async function update(req, res) {
-  const  updatedReservation  = req.body.data;
+  const updatedReservation = req.body.data;
   const { reservation_id } = res.locals.reservation;
   // reservation is a new object with the updated reservation information and the reservation_id from previous validation.
   const reservation = {
     ...updatedReservation,
-    reservation_id: reservation_id
-  }
-  const data = await service.update(reservation)
+    reservation_id: reservation_id,
+  };
+  const data = await service.update(reservation);
   res.status(200).json({ data });
 }
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  listFromQuery: [
-    asyncErrorBoundary(validateQuery),
-    listFromQuery,
-  ],
+  listFromQuery: [asyncErrorBoundary(validateQuery), listFromQuery],
   read: [asyncErrorBoundary(validReservationId), read],
   create: [
     bodyDataHasFirstName,
@@ -126,7 +124,7 @@ module.exports = {
     checkReservationStatus,
     asyncErrorBoundary(updateReservationStatus),
   ],
-  update: [    
+  update: [
     bodyDataHasFirstName,
     bodyDataHasLastName,
     bodyDataHasMobile,
@@ -139,6 +137,6 @@ module.exports = {
     checkFutureDate,
     checkPastTime,
     checkOpenTime,
-    asyncErrorBoundary(update)
-  ]
+    asyncErrorBoundary(update),
+  ],
 };
