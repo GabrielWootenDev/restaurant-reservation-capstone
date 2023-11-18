@@ -2,7 +2,7 @@
 
 Live Deployment: https://restaurant-reservation-project-theta.vercel.app
 
-Backend API: restaurant-reservation-project-api.vercel.app
+Backend API: http://restaurant-reservation-project-api.vercel.app
 
 ## Uses
 
