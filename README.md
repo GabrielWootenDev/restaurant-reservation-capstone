@@ -9,7 +9,7 @@ Backend API: restaurant-reservation-project-api.vercel.app
 This application allows any user or restaurant to create, manage, and view reservations.
 
 - Users are able to create tables with varying capacities.
-- Users are asl oable to create reservations with a guests name, mobile number, date of reservation, reservation time, and amount of people attending.
+- Users are also able to create reservations with a guests name, mobile number, date of reservation, reservation time, and amount of people attending.
 - With small adjustments this can be perfect for any business as well.
 - Finishing a reservation will reopen the table assigned to the reservation.
 - Reservations can be searched by mobile number and every reservation associated with that number will be displayed regardless of it's status.
