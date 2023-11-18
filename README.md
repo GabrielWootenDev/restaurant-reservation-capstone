@@ -1,8 +1,8 @@
 # Restaurant Reservation System
 
-Live Deployment: https://gw-restaurant-res-frontend.herokuapp.com/
+Live Deployment: https://restaurant-reservation-project-theta.vercel.app/
 
-Backend API: https://gw-restaurant-res-backend.herokuapp.com/
+Backend API: restaurant-reservation-project-api.vercel.app
 
 ## Uses
 
